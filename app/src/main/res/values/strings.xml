@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CloudHarvest</string>
+    <string name="hello_world">brought to you by ULAP Research</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_about">About ULAP</string>
+    <string name="action_report">Report bug</string>
+    <string name="action_logout">Logout</string>
+
+    <!-- <string name="title_activity_welcome_page">WelcomePage</string> -->
+    <!-- <string name="title_activity_sign_up">SignUp</string> -->
+    <!-- <string name="title_activity_tabbed_my">TabbedMyActivity</string> -->
+
+    <string name="title_activity_about">About</string>
+
+</resources>
