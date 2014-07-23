@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/wfp-dist.iml" filepath="$PROJECT_DIR$/wfp-dist.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wfp_dist.iml" filepath="$PROJECT_DIR$/wfp_dist.iml" />
     </modules>
   </component>
 </project>
