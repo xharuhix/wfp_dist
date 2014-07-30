@@ -15,6 +15,9 @@ public class WelcomePage extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_page);
 
+        //TODO check if user already accept the TOS or not
+
+
         final CheckBox iAgree = (CheckBox) findViewById(R.id.checkBox_agreement);
         Button signUp = (Button) findViewById(R.id.button_sign_up);
 
@@ -25,7 +28,7 @@ public class WelcomePage extends Activity {
                     startLogin();
                 }
                 else{
-                    Toast.makeText(WelcomePage.this,R.string.hello_world,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WelcomePage.this,R.string.welcome_accept_terms_warning,Toast.LENGTH_SHORT).show();
                 }
             }
         });

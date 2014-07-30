@@ -1,7 +1,6 @@
 package com.ulap_research.weatherforecasterproject;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -16,8 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.Locale;
 
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
@@ -72,7 +69,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                     .setTabListener(this));
         }
 
-
         viewPager.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
@@ -84,9 +80,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 });
     }
 
-        /*
-         * TAB LISTENER
-         */
+    /*
+     * TAB LISTENER
+     */
     // Create a tab listener that is called when the user changes tabs.
 
     @Override
@@ -104,7 +100,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
         // probably ignore this event
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

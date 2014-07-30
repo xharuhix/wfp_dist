@@ -4,12 +4,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-    android:id="@+id/ch_logo"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ch_logo" />
-
     <TextView
     android:text="Dashboard"
     android:layout_width="wrap_content"
