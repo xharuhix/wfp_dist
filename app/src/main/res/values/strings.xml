@@ -2,35 +2,18 @@
 <resources>
 
     <string name="app_name">Plounge</string>
-
+    <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
     <string name="action_about">About ULAP</string>
     <string name="action_report">Report bug</string>
     <string name="action_logout">Logout</string>
     <string name="title_activity_about">About</string>
+    <string name="title_activity_my_garden_acitivity">My Garden</string>
+    <string name="main_tab_dashboard">Dashboard</string>
+    <string name="main_tab_ranking">Ranking</string>
+    <string name="main_tab_weather">Weather</string>
 
-    <!-- Strings related to welcome page-->
-    <string name="welcome_intro"><b>Plounge Terms of Service</b>\n\nbrought to you by ULAP Research\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tempor nisi lorem, vitae gravida orci molestie sed. Etiam non molestie arcu. In nec ornare neque. Nulla ac dapibus eros. Phasellus tincidunt viverra tortor ac pharetra. Nam ut rhoncus mauris. Pellentesque ullamcorper adipiscing mauris, vitae dictum nulla laoreet a.\n\nProin vel pharetra elit. Nunc vehicula sapien et erat dictum porta. Cras enim neque, vulputate quis libero in, mattis accumsan eros. Phasellus justo neque, interdum ut elit eu, dignissim sodales velit. Aliquam et mollis diam. Nam vitae scelerisque elit, quis venenatis risus. In ac quam consequat, egestas metus quis, tempor lorem. In mauris leo, scelerisque eget tincidunt at, euismod eu diam.\n\nPraesent suscipit magna eu rhoncus consectetur. Suspendisse potenti. Nulla rhoncus enim in volutpat condimentum. Suspendisse odio felis, placerat gravida massa ut, consectetur malesuada ante. In viverra risus vitae massa semper, sed auctor leo ullamcorper. Fusce non interdum libero. Nam vitae congue metus. Nam faucibus neque justo, a blandit ipsum tempor sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam suscipit tellus arcu, sit amet cursus arcu imperdiet et. Nam vel ultricies libero. Vivamus velit lacus, suscipit a consequat eu, sodales eget ante.</string>
-    <string name="welcome_accept_terms">I agree with the terms and conditions</string>
-    <string name="welcome_accept_terms_warning">Please accept the terms and conditions</string>
-    <string name="welcome_sign_me_up">Sign me up!</string>
-
-    <!-- Strings related to login and register-->
-    <string name="title_activity_login_desc">Sign in to Plounge</string>
-    <string name="title_activity_register">Register for a new account</string>
-    <string name="title_activity_register_desc">Please fill in your information</string>
-
-    <string name="loading_message">Loading. Please wait…</string>
-    <string name="initializing_message">Initializing. Please wait…</string>
-
-    <string name="prompt_username">Username</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_register">Register</string>
-    <string name="action_register_for_a_new_acc">Register for a new account</string>
-
+    <!-- Strings related to error text -->
     <string name="error_account_already_exist">Username or Email is already existed</string>
     <string name="error_invalid_username">This username is invalid (6 – 20 characters)</string>
     <string name="error_invalid_email">This email address is invalid</string>
@@ -38,10 +21,49 @@
     <string name="error_login_failed">Username or password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_something_went_wrong">Something went wrong!, please try again</string>
+    <string name="error_cannot_fetch">Cannot fetch data</string>
+    <string name="error_cannot_get_location">Cannot get location</string>
     <string name="error_network_connection">Please connect to the network</string>
+
+    <!-- Strings related to welcome page -->
+    <string name="welcome_intro"><b>Plounge Terms of Service</b>\n\nbrought to you by ULAP Research\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tempor nisi lorem, vitae gravida orci molestie sed. Etiam non molestie arcu. In nec ornare neque. Nulla ac dapibus eros. Phasellus tincidunt viverra tortor ac pharetra. Nam ut rhoncus mauris. Pellentesque ullamcorper adipiscing mauris, vitae dictum nulla laoreet a.\n\nProin vel pharetra elit. Nunc vehicula sapien et erat dictum porta. Cras enim neque, vulputate quis libero in, mattis accumsan eros. Phasellus justo neque, interdum ut elit eu, dignissim sodales velit. Aliquam et mollis diam. Nam vitae scelerisque elit, quis venenatis risus. In ac quam consequat, egestas metus quis, tempor lorem. In mauris leo, scelerisque eget tincidunt at, euismod eu diam.\n\nPraesent suscipit magna eu rhoncus consectetur. Suspendisse potenti. Nulla rhoncus enim in volutpat condimentum. Suspendisse odio felis, placerat gravida massa ut, consectetur malesuada ante. In viverra risus vitae massa semper, sed auctor leo ullamcorper. Fusce non interdum libero. Nam vitae congue metus. Nam faucibus neque justo, a blandit ipsum tempor sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam suscipit tellus arcu, sit amet cursus arcu imperdiet et. Nam vel ultricies libero. Vivamus velit lacus, suscipit a consequat eu, sodales eget ante.</string>
+    <string name="welcome_accept_terms">I agree with the terms and conditions</string>
+    <string name="welcome_accept_terms_warning">Please accept the terms and conditions</string>
+    <string name="welcome_sign_me_up">Sign me up!</string>
+
+    <!-- Strings related to login and register -->
+    <string name="title_activity_login_desc">Sign in to Plounge</string>
+    <string name="title_activity_register">Register for a new account</string>
+    <string name="title_activity_register_desc">Please fill in your information</string>
+    <string name="loading_message">Loading. Please wait…</string>
+    <string name="initializing_message">Initializing. Please wait…</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_register">Register</string>
+    <string name="action_register_for_a_new_acc">Register for a new account</string>
 
     <string name="plus_sign_out">Switch Google+ account</string>
     <string name="plus_disconnect">Disconnect from Google+</string>
 
+    <!-- Strings in dashboard tab -->
+    <string name="nav_menu_title">navigation menu</string>
+    <string name="nav_menu_upload_data">Upload my sensor data</string>
+    <string name="nav_menu_garden">Go to my garden</string>
+    <string name="nav_menu_buy_rain">Buy more rain</string>
+    <string name="dashboard_level">Level:</string>
+    <string name="dashboard_exp_next_level">EXP to next level</string>
+    <string name="dashboard_cloud_point">Cloud point:</string>
+    <string name="dashboard_cloud_point_unit">points</string>
+    <string name="dashboard_rain_amount">Rain amount:</string>
+    <string name="dashboard_rain_amount_unit">litres</string>
+    <string name="title_activity_rain_shop">Buy more rain</string>
+    <string name="hello_world">Hello world!</string>
+
+    <!-- Strings in ranking tab -->
+    <string name="user_rank_title">User ranking</string>
+    <string name="global_rank_title">Global ranking</string>
+    <string name="user_rank_text">You are rank</string>
 
 </resources>

@@ -1,56 +1,62 @@
 package com.ulap_research.weatherforecasterproject;
 
 import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.FragmentManager;
+
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.ulap_research.weatherforecasterproject.Resources.SharedPrefResources;
+import com.ulap_research.weatherforecasterproject.RestHelper.RestClient;
+import com.ulap_research.weatherforecasterproject.RestHelper.RestResources;
 
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
-    private String[] tabs = { "Dashboard", "Ranking", "Weather" };
+    private static final String TAG = "MainActivity";
+
+    private SharedPreferences sharedPref;
+
     private ViewPager viewPager;
     private MainPagerAdapter mPagerAdapter;
     private ActionBar actionBar;
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v13.app.FragmentStatePagerAdapter}.
-     */
-//    MainPagerAdapter mainPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-//    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_activity);
-//        if (savedInstanceState == null) {
-//            getFragmentManager().beginTransaction()
-//                    .add(R.id.container, new PlaceholderFragment())
-//                    .commit();
-//
-//        }
+        setContentView(R.layout.activity_main);
+
+        sharedPref = this.getSharedPreferences(SharedPrefResources.PREFERENCE_FILE_KEY, MODE_PRIVATE);
 
         // primary sections of the activity.
         // Create the adapter that will return a fragment for each of the three
-        mPagerAdapter = new MainPagerAdapter(getFragmentManager());
+        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+
+        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                if (key.equals(SharedPrefResources.PREFERENCE_KEY_JSON_USER_INFO) ||
+                        key.equals(SharedPrefResources.PREFERENCE_KEY_JSON_USER_RANK) ||
+                        key.equals(SharedPrefResources.PREFERENCE_KEY_JSON_USER_GLOBAL_RANK)) {
+                    mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+                    Log.d(TAG, "SharedPref has changed");
+                }
+            }
+        };
+        sharedPref.registerOnSharedPreferenceChangeListener(listener);
 
         // Set up the ViewPager with the sections adapter.
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -63,10 +69,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setHomeButtonEnabled(false);
 
+        String[] tabs = { getString(R.string.main_tab_dashboard),
+                getString(R.string.main_tab_ranking),
+                getString(R.string.main_tab_weather)};
+
         // Add 3 tabs, specifying the tab's text and TabListener
         for (String tab_name : tabs) {
-            actionBar.addTab(actionBar.newTab().setText(tab_name)
-                    .setTabListener(this));
+            actionBar.addTab(actionBar.newTab().setText(tab_name).setTabListener(this));
         }
 
         viewPager.setOnPageChangeListener(
@@ -84,7 +93,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      * TAB LISTENER
      */
     // Create a tab listener that is called when the user changes tabs.
-
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
         // show the given tab
@@ -115,6 +123,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch(id){
+            case R.id.refresh:
+                InitializeTask task = new InitializeTask();
+                task.execute((Void) null);
+                return true;
             case R.id.action_about:
                 //dialog?
                 Intent about = new Intent(this,About.class);
@@ -134,7 +146,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 return true;
             case R.id.action_logout:
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -196,6 +207,75 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         public int getCount() {
             // Show 3 total pages
             return 3;
+        }
+    }
+
+    /**
+     * An asynchronous initialization task
+     */
+    public class InitializeTask extends AsyncTask<Void, Void, Boolean> {
+
+        // TODO change to fetch only data from userInfo, ranking, sensor data
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            String apiKey = sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY, "");
+
+            // Set up REST request
+            // Get user info
+            RestClient clientGetUserInfo = new RestClient(RestResources.GET_USER_INFO_URL);
+            clientGetUserInfo.addHeader("Authorization", apiKey);
+
+            // Get user rank
+            RestClient clientGetUserRank = new RestClient(RestResources.GET_USER_RANK);
+            clientGetUserRank.addHeader("Authorization", apiKey);
+
+            // Get global rank
+            RestClient clientGetUserGlobalRank = new RestClient(RestResources.GET_USER_GLOBAL_RANK);
+            clientGetUserGlobalRank.addHeader("Authorization", apiKey);
+
+            try {
+                clientGetUserInfo.execute(RestClient.RequestMethod.GET);
+                clientGetUserRank.execute(RestClient.RequestMethod.GET);
+                clientGetUserGlobalRank.execute(RestClient.RequestMethod.GET);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Log.d(TAG, "GetUserInfo code: " + clientGetUserInfo.getResponseCode() + " msg: " + clientGetUserInfo.getErrorMessage());
+            Log.d(TAG, "GetUserRank code: " + clientGetUserRank.getResponseCode() + " msg: " + clientGetUserRank.getErrorMessage());
+            Log.d(TAG, "GetUserGlobalRank code: " + clientGetUserGlobalRank.getResponseCode() + " msg: " + clientGetUserGlobalRank.getErrorMessage());
+
+            try {
+                String userInfo = clientGetUserInfo.getResponse();
+                String userRank = clientGetUserRank.getResponse();
+                String userGlobalRank = clientGetUserGlobalRank.getResponse();
+
+                // TODO check error response
+                if (userInfo ==  null || userRank == null || userGlobalRank == null) {
+                    return true;
+                }
+                else {
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_INFO, userInfo).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_RANK, userRank).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_GLOBAL_RANK, userGlobalRank).commit();
+
+                    Log.d(TAG, userInfo);
+                    Log.d(TAG, userRank);
+                    Log.d(TAG, userGlobalRank);
+
+                    return false;
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        protected void onPostExecute(Boolean error) {
+            if(error){
+                Toast.makeText(getApplicationContext(), R.string.error_cannot_fetch, Toast.LENGTH_LONG).show();
+            }
         }
     }
 

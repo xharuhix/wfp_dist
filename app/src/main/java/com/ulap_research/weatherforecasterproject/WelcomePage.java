@@ -36,7 +36,7 @@ public class WelcomePage extends Activity {
     }
 
     private void startLogin(){
-        Intent main_intent = new Intent(WelcomePage.this, Login.class);
+        Intent main_intent = new Intent(WelcomePage.this, LoginActivity.class);
         startActivity(main_intent);
         this.finish();
     }

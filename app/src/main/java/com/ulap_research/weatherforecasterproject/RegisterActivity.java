@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,22 +21,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ulap_research.weatherforecasterproject.R;
-import com.ulap_research.weatherforecasterproject.Resources.SharedPreferencesResources;
+import com.ulap_research.weatherforecasterproject.Resources.SharedPrefResources;
 import com.ulap_research.weatherforecasterproject.RestHelper.RestClient;
 import com.ulap_research.weatherforecasterproject.RestHelper.RestResources;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Register extends Activity {
+public class RegisterActivity extends Activity {
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserRegisterTask mRegisterTask;
 
-    private static final String TAG = "Register";
+    private static final String TAG = "RegisterActivity";
 
     // UI references.
     private EditText mUsernameView;
@@ -58,7 +55,7 @@ public class Register extends Activity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Set up SharedPreferences
-        sharedPref = this.getSharedPreferences(SharedPreferencesResources.PREFERENCE_FILE_KEY, MODE_PRIVATE);
+        sharedPref = this.getSharedPreferences(SharedPrefResources.PREFERENCE_FILE_KEY, MODE_PRIVATE);
 
         // Set up progress dialog
         progressDialog = new ProgressDialog(this);
@@ -74,7 +71,12 @@ public class Register extends Activity {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.register || id == EditorInfo.IME_NULL) {
-                    attemptRegister();
+                    if(isNetworkAvailable()) {
+                        attemptRegister();
+                    }
+                    else {
+                        Toast.makeText(RegisterActivity.this, R.string.error_network_connection, Toast.LENGTH_LONG).show();
+                    }
                     return true;
                 }
                 return false;
@@ -89,7 +91,7 @@ public class Register extends Activity {
                     attemptRegister();
                 }
                 else {
-                    Toast.makeText(Register.this, R.string.error_network_connection, Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, R.string.error_network_connection, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -190,7 +192,7 @@ public class Register extends Activity {
     }
 
     private boolean isUsernameValid(String username) {
-        return username.matches("^[A-Za-z0-9]{6,}(?:[_-][A-Za-z0-9]+)*$") && username.length()<=20;
+        return username.matches("^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$") && username.length()<=20 && username.length()>=6;
     }
 
     private boolean isEmailValid(String email) {
@@ -205,7 +207,7 @@ public class Register extends Activity {
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent loginIntent = new Intent(this, Login.class);
+                Intent loginIntent = new Intent(this, LoginActivity.class);
                 startActivity(loginIntent);
                 this.finish();
                 return true;
@@ -243,33 +245,29 @@ public class Register extends Activity {
                 e.printStackTrace();
             }
 
-            Log.d(TAG, "Register code: " + client.getResponseCode() + " msg: " + client.getErrorMessage());
+            Log.d(TAG, "RegisterActivity code: " + client.getResponseCode() + " msg: " + client.getErrorMessage());
 
             try {
                 JSONObject jObject = new JSONObject(client.getResponse());
 
                 if(!jObject.getBoolean("error")) {
                     // get API key from the response
-                    sharedPref.edit().putString(SharedPreferencesResources.PREFERENCE_KEY_APIKEY, jObject.getString("apiKey")).commit();
-                    Log.d(TAG, sharedPref.getString(SharedPreferencesResources.PREFERENCE_KEY_APIKEY,""));
-                    return RestResources.USER_CREATED_SUCCESSFULLY;
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_APIKEY, jObject.getString("apiKey")).commit();
+                    Log.d(TAG, sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY,""));
                 }
-                else {
-                    return jObject.getInt("responseCode");
-                }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return RestResources.USER_CREATE_FAILED;
+            return client.getResponseCode(); // server error
         }
 
         @Override
-        protected void onPostExecute(Integer state) {
+        protected void onPostExecute(Integer code) {
             mRegisterTask = null;
             showProgress(false);
 
-            if (state == RestResources.USER_CREATED_SUCCESSFULLY) {
+            // successfully created a new account
+            if (code == 201) {
                 progressDialog.setMessage(getString(R.string.initializing_message));
                 showProgress(true);
 
@@ -277,10 +275,12 @@ public class Register extends Activity {
                 InitializeTask task = new InitializeTask();
                 task.execute((Void) null);
 
-            } else if (state == RestResources.ACCOUNT_ALREADY_EXISTED) {
-                Toast.makeText(Register.this, R.string.error_account_already_exist, Toast.LENGTH_LONG).show();
-            } else if (state == RestResources.USER_CREATE_FAILED) {
-                Toast.makeText(Register.this, R.string.error_something_went_wrong, Toast.LENGTH_LONG).show();
+            } else if (code == 400) {
+                mUsernameView.setError(getString(R.string.error_account_already_exist));
+                mUsernameView.requestFocus();
+            } else {
+                mPasswordView.setError(getString(R.string.error_something_went_wrong));
+                mPasswordView.requestFocus();
             }
         }
 
@@ -298,7 +298,7 @@ public class Register extends Activity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            String apiKey = sharedPref.getString(SharedPreferencesResources.PREFERENCE_KEY_APIKEY, "");
+            String apiKey = sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY, "");
 
             // Set up REST request
             RestClient clientGetUserInfo = new RestClient(RestResources.GET_USER_INFO_URL);
@@ -331,13 +331,13 @@ public class Register extends Activity {
                     return true;
                 }
                 else {
-                    sharedPref.edit().putString(SharedPreferencesResources.PREFERENCE_KEY_JSON_USER_INFO, userInfo).commit();
-                    sharedPref.edit().putString(SharedPreferencesResources.PREFERENCE_KEY_JSON_CROPS_LIST, cropsList).commit();
-                    sharedPref.edit().putString(SharedPreferencesResources.PREFERENCE_KEY_JSON_ACHIEVEMENT_LIST, achievementsList).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_INFO, userInfo).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_CROPS_LIST, cropsList).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_ACHIEVEMENT_LIST, achievementsList).commit();
 
-                    Log.d(TAG, sharedPref.getString(SharedPreferencesResources.PREFERENCE_KEY_JSON_USER_INFO,""));
-                    Log.d(TAG, sharedPref.getString(SharedPreferencesResources.PREFERENCE_KEY_JSON_CROPS_LIST,""));
-                    Log.d(TAG, sharedPref.getString(SharedPreferencesResources.PREFERENCE_KEY_JSON_ACHIEVEMENT_LIST,""));
+                    Log.d(TAG, sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_INFO,""));
+                    Log.d(TAG, sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_JSON_CROPS_LIST,""));
+                    Log.d(TAG, sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_JSON_ACHIEVEMENT_LIST,""));
 
                     return false;
                 }
@@ -354,7 +354,7 @@ public class Register extends Activity {
                 startMain();
             }
             else {
-                Toast.makeText(Register.this, R.string.error_something_went_wrong, Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, R.string.error_something_went_wrong, Toast.LENGTH_LONG).show();
             }
         }
     }
