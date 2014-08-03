@@ -13,6 +13,8 @@ public class SharedPrefResources {
     public static final String PREFERENCE_KEY_JSON_USER_RANK = "com.tuntunkun.weatherforecaster.json_user_rank";
     public static final String PREFERENCE_KEY_JSON_USER_GLOBAL_RANK = "com.tuntunkun.weatherforecaster.json_global_rank";
 
+    public static final String PREFERENCE_KEY_JSON_SENSORS_LIST = "com.tuntunkun.weatherforecaster.json_sensors_list";
+
     public static final String PREFERENCE_KEY_JSON_CROPS_LIST = "com.tuntunkun.weatherforecaster.json_crops_list";
     public static final String PREFERENCE_KEY_JSON_ACHIEVEMENT_LIST = "com.tuntunkun.weatherforecaster.json_achievement_list";
 

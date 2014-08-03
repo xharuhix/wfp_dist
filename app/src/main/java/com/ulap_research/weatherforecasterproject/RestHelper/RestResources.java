@@ -5,7 +5,7 @@ package com.ulap_research.weatherforecasterproject.RestHelper;
  */
 public class RestResources {
 
-    public static final String HOST = "https://163.221.127.68/wfp_dist/api/v1";
+    public static final String HOST = "https://163.221.153.37/wfp_dist/api/v1";
 
     // REST URL
     public static final String REGISTER_URL = HOST + "/users/register";
@@ -14,6 +14,8 @@ public class RestResources {
 
     public static final String GET_USER_RANK = HOST + "/users/rank";
     public static final String GET_USER_GLOBAL_RANK = HOST + "/users/global_rank";
+
+    public static final String GET_SENSORS_LIST = HOST + "/sensors/list_lasted";
 
     public static final String GET_CROPS_LIST = HOST + "/crops/list";
     public static final String GET_ACHIEVEMENTS_LIST = HOST + "/achievements/list";

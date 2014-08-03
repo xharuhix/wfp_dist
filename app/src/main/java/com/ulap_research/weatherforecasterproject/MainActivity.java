@@ -220,7 +220,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         protected Boolean doInBackground(Void... params) {
             String apiKey = sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY, "");
 
-            // Set up REST request
+            /*
+             *   Set up REST request
+             */
+
             // Get user info
             RestClient clientGetUserInfo = new RestClient(RestResources.GET_USER_INFO_URL);
             clientGetUserInfo.addHeader("Authorization", apiKey);
@@ -233,35 +236,35 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             RestClient clientGetUserGlobalRank = new RestClient(RestResources.GET_USER_GLOBAL_RANK);
             clientGetUserGlobalRank.addHeader("Authorization", apiKey);
 
+            // Get lasted sensors list
+            RestClient clientGetSensorsList = new RestClient(RestResources.GET_SENSORS_LIST);
+            clientGetSensorsList.addHeader("Authorization", apiKey);
+
             try {
                 clientGetUserInfo.execute(RestClient.RequestMethod.GET);
                 clientGetUserRank.execute(RestClient.RequestMethod.GET);
                 clientGetUserGlobalRank.execute(RestClient.RequestMethod.GET);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                clientGetSensorsList.execute(RestClient.RequestMethod.GET);
 
-            Log.d(TAG, "GetUserInfo code: " + clientGetUserInfo.getResponseCode() + " msg: " + clientGetUserInfo.getErrorMessage());
-            Log.d(TAG, "GetUserRank code: " + clientGetUserRank.getResponseCode() + " msg: " + clientGetUserRank.getErrorMessage());
-            Log.d(TAG, "GetUserGlobalRank code: " + clientGetUserGlobalRank.getResponseCode() + " msg: " + clientGetUserGlobalRank.getErrorMessage());
-
-            try {
                 String userInfo = clientGetUserInfo.getResponse();
                 String userRank = clientGetUserRank.getResponse();
                 String userGlobalRank = clientGetUserGlobalRank.getResponse();
+                String sensorsList = clientGetSensorsList.getResponse();
 
-                // TODO check error response
-                if (userInfo ==  null || userRank == null || userGlobalRank == null) {
+                if (userInfo ==  null || userRank == null || userGlobalRank == null ||
+                        sensorsList == null) {
                     return true;
                 }
                 else {
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_INFO, userInfo).commit();
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_RANK, userRank).commit();
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_GLOBAL_RANK, userGlobalRank).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_SENSORS_LIST, sensorsList).commit();
 
                     Log.d(TAG, userInfo);
                     Log.d(TAG, userRank);
                     Log.d(TAG, userGlobalRank);
+                    Log.d(TAG, sensorsList);
 
                     return false;
                 }

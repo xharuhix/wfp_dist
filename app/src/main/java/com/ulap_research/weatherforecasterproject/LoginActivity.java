@@ -318,13 +318,6 @@ public class LoginActivity extends PlusBaseActivity {
             client.addParam("username", mUsername);
             client.addParam("password", mPassword);
 
-//            try {
-//                // Simulate network access.
-//                Thread.sleep(10000);
-//            } catch (InterruptedException e) {
-//                return false;
-//            }
-
             try {
                 client.execute(RestClient.RequestMethod.POST);
             } catch (Exception e) {
@@ -385,7 +378,10 @@ public class LoginActivity extends PlusBaseActivity {
         protected Boolean doInBackground(Void... params) {
             String apiKey = sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY, "");
 
-            // Set up REST request
+            /*
+             *   Set up REST request
+             */
+
             // Get user info
             RestClient clientGetUserInfo = new RestClient(RestResources.GET_USER_INFO_URL);
             clientGetUserInfo.addHeader("Authorization", apiKey);
@@ -402,9 +398,13 @@ public class LoginActivity extends PlusBaseActivity {
             RestClient clientGetCropsList = new RestClient(RestResources.GET_CROPS_LIST);
             clientGetCropsList.addHeader("Authorization", apiKey);
 
-            // Get all acheivement list
+            // Get all achievement list
             RestClient clientGetAchievementsList = new RestClient(RestResources.GET_ACHIEVEMENTS_LIST);
             clientGetAchievementsList.addHeader("Authorization", apiKey);
+
+            // Get lasted sensors list
+            RestClient clientGetSensorsList = new RestClient(RestResources.GET_SENSORS_LIST);
+            clientGetSensorsList.addHeader("Authorization", apiKey);
 
             try {
                 clientGetUserInfo.execute(RestClient.RequestMethod.GET);
@@ -412,26 +412,17 @@ public class LoginActivity extends PlusBaseActivity {
                 clientGetUserGlobalRank.execute(RestClient.RequestMethod.GET);
                 clientGetCropsList.execute(RestClient.RequestMethod.GET);
                 clientGetAchievementsList.execute(RestClient.RequestMethod.GET);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                clientGetSensorsList.execute(RestClient.RequestMethod.GET);
 
-            Log.d(TAG, "GetUserInfo code: " + clientGetUserInfo.getResponseCode() + " msg: " + clientGetUserInfo.getErrorMessage());
-            Log.d(TAG, "GetUserRank code: " + clientGetUserRank.getResponseCode() + " msg: " + clientGetUserRank.getErrorMessage());
-            Log.d(TAG, "GetUserGlobalRank code: " + clientGetUserGlobalRank.getResponseCode() + " msg: " + clientGetUserGlobalRank.getErrorMessage());
-            Log.d(TAG, "GetCropsList code: " + clientGetCropsList.getResponseCode() + " msg: " + clientGetCropsList.getErrorMessage());
-            Log.d(TAG, "GetAchievementsList code: " + clientGetAchievementsList.getResponseCode() + " msg: " + clientGetAchievementsList.getErrorMessage());
-
-            try {
                 String userInfo = clientGetUserInfo.getResponse();
                 String userRank = clientGetUserRank.getResponse();
                 String userGlobalRank = clientGetUserGlobalRank.getResponse();
                 String cropsList = clientGetCropsList.getResponse();
                 String achievementsList = clientGetAchievementsList.getResponse();
+                String sensorsList = clientGetSensorsList.getResponse();
 
-                // TODO check error response
                 if (userInfo ==  null || userRank == null || userGlobalRank == null ||
-                        cropsList == null || achievementsList == null) {
+                        cropsList == null || achievementsList == null || sensorsList == null) {
                     return true;
                 }
                 else {
@@ -440,12 +431,14 @@ public class LoginActivity extends PlusBaseActivity {
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_GLOBAL_RANK, userGlobalRank).commit();
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_CROPS_LIST, cropsList).commit();
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_ACHIEVEMENT_LIST, achievementsList).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_SENSORS_LIST, sensorsList).commit();
 
                     Log.d(TAG, userInfo);
                     Log.d(TAG, userRank);
                     Log.d(TAG, userGlobalRank);
                     Log.d(TAG, cropsList);
                     Log.d(TAG, achievementsList);
+                    Log.d(TAG, sensorsList);
 
                     return false;
                 }

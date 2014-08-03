@@ -28,11 +28,11 @@ import java.util.ArrayList;
 public class RankingFragmentTab extends Fragment {
     private static final String TAG = "RankingFragmentTab";
 
-    private SharedPreferences sharedPref;
-
     // views
     private TextView tvUserRank;
     private ListView lvGlobalRank;
+
+    private SharedPreferences sharedPref;
 
     private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreflistener;
 

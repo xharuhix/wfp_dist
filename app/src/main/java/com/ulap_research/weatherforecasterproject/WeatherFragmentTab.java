@@ -1,6 +1,7 @@
 package com.ulap_research.weatherforecasterproject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -21,10 +22,18 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.ulap_research.weatherforecasterproject.Resources.SharedPrefResources;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class WeatherFragmentTab extends Fragment {
     private static final String TAG = "WeatherFragmentTab";
+
+    private SharedPreferences sharedPref;
+    private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreflistener;
 
     private SupportMapFragment fragment;
     private GoogleMap map;
@@ -46,6 +55,19 @@ public class WeatherFragmentTab extends Fragment {
             fragment = SupportMapFragment.newInstance();
             fm.beginTransaction().replace(R.id.map_container, fragment).commit();
         }
+
+        // setup shared preferences
+        sharedPref = this.getActivity().getSharedPreferences(SharedPrefResources.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
+
+        // set OnSharedPreferenceChangeListener
+        onSharedPreflistener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                if (key.equals(SharedPrefResources.PREFERENCE_KEY_JSON_SENSORS_LIST)) {
+                    updateMapMarker();
+                    Log.d(TAG, "SharedPref has changed");
+                }
+            }
+        };
     }
 
     @Override
@@ -57,10 +79,6 @@ public class WeatherFragmentTab extends Fragment {
 
             // set custom info windows
             map.setInfoWindowAdapter(new MyInfoWindowAdapter());
-
-            // DEMO set marker
-            map.addMarker(new MarkerOptions().position(new LatLng(34.73239,135.732408)).title("My Home").snippet("Home Address\ntest"));
-            map.addMarker(new MarkerOptions().position(new LatLng(34.71,135.71)).title("My Home").snippet("Home Address\ntest"));
 
             LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
@@ -74,30 +92,49 @@ public class WeatherFragmentTab extends Fragment {
                 Toast.makeText(getActivity(), R.string.error_cannot_get_location, Toast.LENGTH_SHORT).show();
             }
         }
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(TAG, "create");
+        // set onSharedPref changed listener
+        sharedPref.registerOnSharedPreferenceChangeListener(onSharedPreflistener);
+
+        updateMapMarker();
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "pause");
+
+        // unset onSharedPref changed listener
+        sharedPref.unregisterOnSharedPreferenceChangeListener(onSharedPreflistener);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "destroyView");
-    }
+    private void updateMapMarker() {
+        try {
+            // get ranking from JSON and update text view
+            JSONObject jObjectSensors = new JSONObject(sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_JSON_SENSORS_LIST, ""));
+            JSONArray jArray = jObjectSensors.getJSONArray("sensorData");
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "destroy");
+            // clear map markers
+            map.clear();
+
+            for (int i=0; i < jArray.length(); i++) {
+                JSONObject sensorObject = jArray.getJSONObject(i);
+                // Pulling sensor data from the array
+                double lad = sensorObject.getDouble("ladtitude");
+                double lon = sensorObject.getDouble("longtitude");
+                String time = sensorObject.getString("timestamp");
+
+                map.addMarker(new MarkerOptions()
+                        .position(new LatLng(lad, lon))
+                        .title(time)
+                        .snippet("Pressure: " + sensorObject.getString("pressure") + "\n" +
+                                "Humidity: " + sensorObject.getString("humidity") + "\n" +
+                                "Proximity: " + sensorObject.getString("proximity")));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
