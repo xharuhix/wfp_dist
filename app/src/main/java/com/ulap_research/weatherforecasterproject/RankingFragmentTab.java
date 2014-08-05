@@ -22,9 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by LouieZamora on 7/18/14.
- */
+
 public class RankingFragmentTab extends Fragment {
     private static final String TAG = "RankingFragmentTab";
 
@@ -56,11 +54,11 @@ public class RankingFragmentTab extends Fragment {
             public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
                 if (key.equals(SharedPrefResources.PREFERENCE_KEY_JSON_USER_RANK)) {
                     updateUserRank();
-                    Log.d(TAG, "SharedPref has changed");
+                    Log.d(TAG, "SharedPref PREFERENCE_KEY_JSON_USER_RANK has changed");
                 }
                 if (key.equals(SharedPrefResources.PREFERENCE_KEY_JSON_USER_GLOBAL_RANK)) {
                     updateListGlobalRank();
-                    Log.d(TAG, "SharedPref has changed");
+                    Log.d(TAG, "SharedPref PREFERENCE_KEY_JSON_USER_GLOBAL_RANK has changed");
                 }
             }
         };
@@ -110,9 +108,9 @@ public class RankingFragmentTab extends Fragment {
 
         CustomRankingAdapter adapter = new CustomRankingAdapter(getActivity(), username, rankNum, isUserRank);
 
-        ListView listView = (ListView) getActivity().findViewById(R.id.list_global_ranking);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvGlobalRank = (ListView) getActivity().findViewById(R.id.list_global_ranking);
+        lvGlobalRank.setAdapter(adapter);
+        lvGlobalRank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View arg1
                     , int arg2, long arg3) {
 

@@ -64,7 +64,7 @@ public class WeatherFragmentTab extends Fragment {
             public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
                 if (key.equals(SharedPrefResources.PREFERENCE_KEY_JSON_SENSORS_LIST)) {
                     updateMapMarker();
-                    Log.d(TAG, "SharedPref has changed");
+                    Log.d(TAG, "SharedPref PREFERENCE_KEY_JSON_SENSORS_LIST has changed");
                 }
             }
         };

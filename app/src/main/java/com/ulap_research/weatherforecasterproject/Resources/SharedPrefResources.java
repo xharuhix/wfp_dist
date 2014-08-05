@@ -8,14 +8,22 @@ public class SharedPrefResources {
 
     public static final String PREFERENCE_KEY_ACCEPT_TOS = "com.tuntunkun.weatherforecaster.accept_tos";
 
+    // user info
     public static final String PREFERENCE_KEY_JSON_USER_INFO = "com.tuntunkun.weatherforecaster.json_user_info";
-    public static final String PREFERENCE_KEY_JSON_USER_CROPS = "com.tuntunkun.weatherforecaster.json_user_crops";
+
+    // ranking
     public static final String PREFERENCE_KEY_JSON_USER_RANK = "com.tuntunkun.weatherforecaster.json_user_rank";
     public static final String PREFERENCE_KEY_JSON_USER_GLOBAL_RANK = "com.tuntunkun.weatherforecaster.json_global_rank";
 
+    // lasted sensor info
     public static final String PREFERENCE_KEY_JSON_SENSORS_LIST = "com.tuntunkun.weatherforecaster.json_sensors_list";
 
+    // crops
     public static final String PREFERENCE_KEY_JSON_CROPS_LIST = "com.tuntunkun.weatherforecaster.json_crops_list";
+    public static final String PREFERENCE_KEY_JSON_USER_CROPS = "com.tuntunkun.weatherforecaster.json_user_crops";
+
+    // achievements
+    public static final String PREFERENCE_KEY_JSON_USER_ACHIEVEMENTS = "com.tuntunkun.weatherforecaster.json_user_achievements";
     public static final String PREFERENCE_KEY_JSON_ACHIEVEMENT_LIST = "com.tuntunkun.weatherforecaster.json_achievement_list";
 
 

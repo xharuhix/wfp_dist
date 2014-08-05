@@ -46,17 +46,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // Create the adapter that will return a fragment for each of the three
         mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
 
-        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                if (key.equals(SharedPrefResources.PREFERENCE_KEY_JSON_USER_INFO) ||
-                        key.equals(SharedPrefResources.PREFERENCE_KEY_JSON_USER_RANK) ||
-                        key.equals(SharedPrefResources.PREFERENCE_KEY_JSON_USER_GLOBAL_RANK)) {
-                    mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
-                    Log.d(TAG, "SharedPref has changed");
-                }
-            }
-        };
-        sharedPref.registerOnSharedPreferenceChangeListener(listener);
+        // start to fetch data
+        InitializeTask task = new InitializeTask();
+        task.execute((Void) null);
 
         // Set up the ViewPager with the sections adapter.
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -215,7 +207,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      */
     public class InitializeTask extends AsyncTask<Void, Void, Boolean> {
 
-        // TODO change to fetch only data from userInfo, ranking, sensor data
         @Override
         protected Boolean doInBackground(Void... params) {
             String apiKey = sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY, "");

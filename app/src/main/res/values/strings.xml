@@ -8,7 +8,6 @@
     <string name="action_report">Report bug</string>
     <string name="action_logout">Logout</string>
     <string name="title_activity_about">About</string>
-    <string name="title_activity_my_garden_acitivity">My Garden</string>
     <string name="main_tab_dashboard">Dashboard</string>
     <string name="main_tab_ranking">Ranking</string>
     <string name="main_tab_weather">Weather</string>
@@ -43,7 +42,6 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">Register</string>
     <string name="action_register_for_a_new_acc">Register for a new account</string>
-
     <string name="plus_sign_out">Switch Google+ account</string>
     <string name="plus_disconnect">Disconnect from Google+</string>
 
@@ -52,6 +50,7 @@
     <string name="nav_menu_upload_data">Upload my sensor data</string>
     <string name="nav_menu_garden">Go to my garden</string>
     <string name="nav_menu_buy_rain">Buy more rain</string>
+    <string name="nav_menu_achievements">Achievements</string>
     <string name="dashboard_level">Level:</string>
     <string name="dashboard_exp_next_level">EXP to next level</string>
     <string name="dashboard_cloud_point">Cloud point:</string>
@@ -65,5 +64,40 @@
     <string name="user_rank_title">User ranking</string>
     <string name="global_rank_title">Global ranking</string>
     <string name="user_rank_text">You are rank</string>
+    <string name="rank">Rank</string>
+
+    <!-- Strings in achievement activity -->
+    <string name="title_activity_achievement">Achievement List</string>
+    <string name="completed_achievement">Completed</string>
+    <string name="uncompleted_achievement">Uncompleted</string>
+
+    <!-- Strings in rain shop activity -->
+    <string name="rain_buy_guide_text">Please select amount of rain to buy</string>
+    <string name="rain_buy_loading">Buying rain. Please wait…</string>
+    <string name="rain_unit_desc">Litres of rain</string>
+    <string name="rain_cloud_points">cloud points</string>
+    <string name="rain_buy_confirm">Do you really want to buy this?</string>
+    <string name="rain_brought_success">Successfully brought rain</string>
+    <string name="rain_brought_fail">Not enough cloud point to buy</string>
+
+    <!-- Strings in my garden activity -->
+    <string name="title_activity_my_garden_acitivity">My Garden</string>
+    <string name="garden_crop_level">Level:</string>
+    <string name="garden_next_level_desc">litres of rain to next level</string>
+    <string name="garden_crop_max_level">Your crop is at max level</string>
+    <string name="garden_no_crop">No crop in your garden, plant one!</string>
+    <string name="garden_menu_plant_crops">plant crops</string>
+
+    <!-- String in crop shop activity -->
+    <string name="title_activity_crop_shop">Plant Crops</string>
+    <string name="crop_shop_rarity">Rarity rate:</string>
+    <string name="crop_shop_rarity_unit">stars</string>
+    <string name="crop_shop_price">Price:</string>
+    <string name="crop_shop_cloud_points">cloud points</string>
+    <string name="crop_plant_guide_text">Please select crop to plant</string>
+    <string name="crop_plant_loading">Planting crop. Please wait…</string>
+    <string name="crop_plant_confirm">Do you really want to plant this crop?</string>
+    <string name="crop_planted_success">Successfully planted</string>
+    <string name="crop_planted_fail">Not enough cloud point to buy</string>
 
 </resources>

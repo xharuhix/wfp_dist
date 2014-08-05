@@ -89,6 +89,14 @@
             android:name=".RainShopActivity"
             android:label="@string/title_activity_rain_shop" >
         </activity>
+        <activity
+            android:name=".AchievementActivity"
+            android:label="@string/title_activity_achievement" >
+        </activity>
+        <activity
+            android:name=".CropShopActivity"
+            android:label="@string/title_activity_crop_shop" >
+        </activity>
     </application>
 
 </manifest>

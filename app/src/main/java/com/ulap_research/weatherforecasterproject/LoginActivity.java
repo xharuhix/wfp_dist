@@ -187,39 +187,6 @@ public class LoginActivity extends PlusBaseActivity {
         }
     }
 
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-//    public void showProgress(final boolean show) {
-//        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-//        // for very easy animations. If available, use these APIs to fade-in
-//        // the progress spinner.
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-//            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-//
-//            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-//            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-//                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-//                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-//                }
-//            });
-//
-//            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-//            mProgressView.animate().setDuration(shortAnimTime).alpha(
-//                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-//                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-//                }
-//            });
-//        } else {
-//            // The ViewPropertyAnimator APIs are not available, so simply show
-//            // and hide the relevant UI components.
-//            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-//            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-//        }
-//    }
-
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -398,9 +365,17 @@ public class LoginActivity extends PlusBaseActivity {
             RestClient clientGetCropsList = new RestClient(RestResources.GET_CROPS_LIST);
             clientGetCropsList.addHeader("Authorization", apiKey);
 
+            // Get user's crops
+            RestClient clientGetUserCrops = new RestClient(RestResources.GET_USER_CROPS);
+            clientGetUserCrops.addHeader("Authorization", apiKey);
+
             // Get all achievement list
             RestClient clientGetAchievementsList = new RestClient(RestResources.GET_ACHIEVEMENTS_LIST);
             clientGetAchievementsList.addHeader("Authorization", apiKey);
+
+            // Get user's completed achievements
+            RestClient clientGetUserAchievements = new RestClient(RestResources.GET_USERS_ACHIEVEMENTS);
+            clientGetUserAchievements.addHeader("Authorization", apiKey);
 
             // Get lasted sensors list
             RestClient clientGetSensorsList = new RestClient(RestResources.GET_SENSORS_LIST);
@@ -411,33 +386,44 @@ public class LoginActivity extends PlusBaseActivity {
                 clientGetUserRank.execute(RestClient.RequestMethod.GET);
                 clientGetUserGlobalRank.execute(RestClient.RequestMethod.GET);
                 clientGetCropsList.execute(RestClient.RequestMethod.GET);
+                clientGetUserCrops.execute(RestClient.RequestMethod.GET);
                 clientGetAchievementsList.execute(RestClient.RequestMethod.GET);
+                clientGetUserAchievements.execute(RestClient.RequestMethod.GET);
                 clientGetSensorsList.execute(RestClient.RequestMethod.GET);
 
                 String userInfo = clientGetUserInfo.getResponse();
                 String userRank = clientGetUserRank.getResponse();
                 String userGlobalRank = clientGetUserGlobalRank.getResponse();
                 String cropsList = clientGetCropsList.getResponse();
+                String userCrops = clientGetUserCrops.getResponse();
                 String achievementsList = clientGetAchievementsList.getResponse();
+                String userAchievements = clientGetUserAchievements.getResponse();
                 String sensorsList = clientGetSensorsList.getResponse();
 
                 if (userInfo ==  null || userRank == null || userGlobalRank == null ||
-                        cropsList == null || achievementsList == null || sensorsList == null) {
+                        cropsList == null || userCrops == null || achievementsList == null ||
+                        userAchievements == null || sensorsList == null) {
                     return true;
                 }
                 else {
+                    // put data to shared preferences
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_INFO, userInfo).commit();
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_RANK, userRank).commit();
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_GLOBAL_RANK, userGlobalRank).commit();
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_CROPS_LIST, cropsList).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_CROPS, userCrops).commit();
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_ACHIEVEMENT_LIST, achievementsList).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_ACHIEVEMENTS, userAchievements).commit();
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_SENSORS_LIST, sensorsList).commit();
 
+                    // debug
                     Log.d(TAG, userInfo);
                     Log.d(TAG, userRank);
                     Log.d(TAG, userGlobalRank);
                     Log.d(TAG, cropsList);
+                    Log.d(TAG, userCrops);
                     Log.d(TAG, achievementsList);
+                    Log.d(TAG, userAchievements);
                     Log.d(TAG, sensorsList);
 
                     return false;

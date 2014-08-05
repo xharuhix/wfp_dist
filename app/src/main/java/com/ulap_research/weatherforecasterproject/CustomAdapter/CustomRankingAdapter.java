@@ -16,10 +16,10 @@ import java.util.ArrayList;
 
 
 public class CustomRankingAdapter extends BaseAdapter{
-    Context mContext;
-    ArrayList<String> username;
-    ArrayList<Integer> rankNum;
-    ArrayList<Boolean> isUserRank;
+    private Context mContext;
+    private ArrayList<String> username;
+    private ArrayList<Integer> rankNum;
+    private ArrayList<Boolean> isUserRank;
 
     public CustomRankingAdapter(Context context, ArrayList<String> username
             , ArrayList<Integer> rankNum, ArrayList<Boolean> isUserRank) {

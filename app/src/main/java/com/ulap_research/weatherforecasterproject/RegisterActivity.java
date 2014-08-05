@@ -300,44 +300,86 @@ public class RegisterActivity extends Activity {
         protected Boolean doInBackground(Void... params) {
             String apiKey = sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY, "");
 
-            // Set up REST request
+            /*
+             *   Set up REST request
+             */
+
+            // Get user info
             RestClient clientGetUserInfo = new RestClient(RestResources.GET_USER_INFO_URL);
             clientGetUserInfo.addHeader("Authorization", apiKey);
 
+            // Get user rank
+            RestClient clientGetUserRank = new RestClient(RestResources.GET_USER_RANK);
+            clientGetUserRank.addHeader("Authorization", apiKey);
+
+            // Get global rank
+            RestClient clientGetUserGlobalRank = new RestClient(RestResources.GET_USER_GLOBAL_RANK);
+            clientGetUserGlobalRank.addHeader("Authorization", apiKey);
+
+            // Get all crops list
             RestClient clientGetCropsList = new RestClient(RestResources.GET_CROPS_LIST);
             clientGetCropsList.addHeader("Authorization", apiKey);
 
+            // Get user's crops
+            RestClient clientGetUserCrops = new RestClient(RestResources.GET_USER_CROPS);
+            clientGetUserCrops.addHeader("Authorization", apiKey);
+
+            // Get all achievement list
             RestClient clientGetAchievementsList = new RestClient(RestResources.GET_ACHIEVEMENTS_LIST);
             clientGetAchievementsList.addHeader("Authorization", apiKey);
 
+            // Get user's completed achievements
+            RestClient clientGetUserAchievements = new RestClient(RestResources.GET_USERS_ACHIEVEMENTS);
+            clientGetUserAchievements.addHeader("Authorization", apiKey);
+
+            // Get lasted sensors list
+            RestClient clientGetSensorsList = new RestClient(RestResources.GET_SENSORS_LIST);
+            clientGetSensorsList.addHeader("Authorization", apiKey);
+
             try {
                 clientGetUserInfo.execute(RestClient.RequestMethod.GET);
+                clientGetUserRank.execute(RestClient.RequestMethod.GET);
+                clientGetUserGlobalRank.execute(RestClient.RequestMethod.GET);
                 clientGetCropsList.execute(RestClient.RequestMethod.GET);
+                clientGetUserCrops.execute(RestClient.RequestMethod.GET);
                 clientGetAchievementsList.execute(RestClient.RequestMethod.GET);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                clientGetUserAchievements.execute(RestClient.RequestMethod.GET);
+                clientGetSensorsList.execute(RestClient.RequestMethod.GET);
 
-            Log.d(TAG, "GetUserInfo code: " + clientGetUserInfo.getResponseCode() + " msg: " + clientGetUserInfo.getErrorMessage());
-            Log.d(TAG, "GetCropsList code: " + clientGetCropsList.getResponseCode() + " msg: " + clientGetCropsList.getErrorMessage());
-            Log.d(TAG, "GetAchievementsList code: " + clientGetAchievementsList.getResponseCode() + " msg: " + clientGetAchievementsList.getErrorMessage());
-
-            try {
                 String userInfo = clientGetUserInfo.getResponse();
+                String userRank = clientGetUserRank.getResponse();
+                String userGlobalRank = clientGetUserGlobalRank.getResponse();
                 String cropsList = clientGetCropsList.getResponse();
+                String userCrops = clientGetUserCrops.getResponse();
                 String achievementsList = clientGetAchievementsList.getResponse();
+                String userAchievements = clientGetUserAchievements.getResponse();
+                String sensorsList = clientGetSensorsList.getResponse();
 
-                if (userInfo ==  null || cropsList == null || achievementsList == null) {
+                if (userInfo ==  null || userRank == null || userGlobalRank == null ||
+                        cropsList == null || userCrops == null || achievementsList == null ||
+                        userAchievements == null || sensorsList == null) {
                     return true;
                 }
                 else {
+                    // put data to shared preferences
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_INFO, userInfo).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_RANK, userRank).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_GLOBAL_RANK, userGlobalRank).commit();
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_CROPS_LIST, cropsList).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_CROPS, userCrops).commit();
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_ACHIEVEMENT_LIST, achievementsList).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_ACHIEVEMENTS, userAchievements).commit();
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_SENSORS_LIST, sensorsList).commit();
 
-                    Log.d(TAG, sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_INFO,""));
-                    Log.d(TAG, sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_JSON_CROPS_LIST,""));
-                    Log.d(TAG, sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_JSON_ACHIEVEMENT_LIST,""));
+                    // debug
+                    Log.d(TAG, userInfo);
+                    Log.d(TAG, userRank);
+                    Log.d(TAG, userGlobalRank);
+                    Log.d(TAG, cropsList);
+                    Log.d(TAG, userCrops);
+                    Log.d(TAG, achievementsList);
+                    Log.d(TAG, userAchievements);
+                    Log.d(TAG, sensorsList);
 
                     return false;
                 }
@@ -358,5 +400,4 @@ public class RegisterActivity extends Activity {
             }
         }
     }
-
 }

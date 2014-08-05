@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ulap_research.weatherforecasterproject.Resources.SharedPrefResources;
 
@@ -34,6 +35,7 @@ public class DashboardFragmentTab extends Fragment {
     private TextView tvCloudPoint;
     private TextView tvRainAmount;
     private ProgressBar levelProgressBar;
+    private ListView menuListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,7 +57,7 @@ public class DashboardFragmentTab extends Fragment {
             public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
                 if (key.equals(SharedPrefResources.PREFERENCE_KEY_JSON_USER_INFO)) {
                     updateDashboard();
-                    Log.d(TAG, "SharedPref has changed");
+                    Log.d(TAG, "SharedPref PREFERENCE_KEY_JSON_USER_INFO has changed");
                 }
             }
         };
@@ -71,26 +73,31 @@ public class DashboardFragmentTab extends Fragment {
         // load strings menu
         String[] str = { getString(R.string.nav_menu_upload_data),
                 getString(R.string.nav_menu_garden),
-                getString(R.string.nav_menu_buy_rain)};
+                getString(R.string.nav_menu_buy_rain),
+                getString(R.string.nav_menu_achievements)};
 
         // set list view navigation menu
-        ListView listView = (ListView)getView().findViewById(R.id.list_menu);
-        listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, str));
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        menuListView = (ListView)getView().findViewById(R.id.list_menu);
+        menuListView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, str));
+        menuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0
                     , View arg1, int arg2, long arg3) {
                 Intent intent;
                 switch(arg2) {
                     case 0 :
-                        intent = new Intent(getActivity(), Settings.class);
-                        startActivity(intent);
+                        //TODO
+                        Toast.makeText(getActivity(), "TODO: upload data", Toast.LENGTH_SHORT).show();
                         break;
                     case 1 :
                         intent = new Intent(getActivity(), MyGardenActivity.class);
                         startActivity(intent);
                         break;
                     case 2 :
-                        intent = new Intent(getActivity(), Settings.class);
+                        intent = new Intent(getActivity(), RainShopActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 3 :
+                        intent = new Intent(getActivity(), AchievementActivity.class);
                         startActivity(intent);
                         break;
                 }
