@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.plus.model.people.Person;
 import com.ulap_research.weatherforecasterproject.Resources.SharedPrefResources;
 import com.ulap_research.weatherforecasterproject.RestHelper.RestClient;
 import com.ulap_research.weatherforecasterproject.RestHelper.RestResources;
@@ -49,8 +48,6 @@ public class LoginActivity extends PlusBaseActivity {
     // UI references.
     private EditText mUsernameView;
     private EditText mPasswordView;
-    private SignInButton mPlusSignInButton;
-    private View mSignOutButtons;
     private ProgressDialog progressDialog;
 
     private SharedPreferences sharedPref;
@@ -73,25 +70,24 @@ public class LoginActivity extends PlusBaseActivity {
         progressDialog.setMessage(getString(R.string.loading_message)); // message
         progressDialog.setCancelable(false);
 
-        // Find the Google+ sign in button.
-        mPlusSignInButton = (SignInButton) findViewById(R.id.plus_sign_in_button);
-        if (supportsGooglePlayServices()) {
-            // Set a listener to connect the user when the G+ button is clicked.
-            mPlusSignInButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    signIn();
-                }
-            });
-        } else {
-            // Don't offer G+ sign in if the app's version is too low to support Google Play
-            // Services.
-            mPlusSignInButton.setVisibility(View.GONE);
-            return;
-        }
+        // TODO: add this back when enable G+ login
+//        Find the Google+ sign in button.
+//        mPlusSignInButton = (SignInButton) findViewById(R.id.plus_sign_in_button);
+//        if (supportsGooglePlayServices()) {
+//            // Set a listener to connect the user when the G+ button is clicked.
+//            mPlusSignInButton.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    signIn();
+//                }
+//            });
+//        } else {
+//            // Don't offer G+ sign in if the app's version is too low to support Google Play
+//            // Services.
+//            mPlusSignInButton.setVisibility(View.GONE);
+//            return;
+//        }
 
-        // Find the Google+ sign out button
-        mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
 
         // Set up the login form.
         mUsernameView = (EditText) findViewById(R.id.username);
@@ -212,21 +208,7 @@ public class LoginActivity extends PlusBaseActivity {
      */
     @Override
     protected void onPlusClientSignIn() {
-        //Set up sign out and disconnect buttons.
-        Button signOutButton = (Button) findViewById(R.id.plus_sign_out_button);
-        signOutButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signOut();
-            }
-        });
-        Button disconnectButton = (Button) findViewById(R.id.plus_disconnect_button);
-        disconnectButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                revokeAccess();
-            }
-        });
+
     }
 
     @Override
@@ -234,17 +216,12 @@ public class LoginActivity extends PlusBaseActivity {
         showProgress(show);
     }
 
+    /**
+     * Called after successfully connected
+     */
     @Override
     protected void updateConnectButtonState() {
-        //TODO: Update this logic to also handle the user logged in by email.
 
-        // check API key exist or not
-
-        boolean connected = getPlusClient().isConnected();
-        if(connected) Log.d("TEST","CONNECTED G+");
-
-        mSignOutButtons.setVisibility(connected ? View.VISIBLE : View.GONE);
-        mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -339,9 +316,8 @@ public class LoginActivity extends PlusBaseActivity {
         }
     }
 
-    // TODO fetch all data before login to the system
     /**
-     * An asynchronous initialization task
+     * An asynchronous initialization task (fetch all data and save it to shared preferences)
      */
     public class InitializeTask extends AsyncTask<Void, Void, Boolean> {
 

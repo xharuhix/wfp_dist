@@ -121,7 +121,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 return true;
             case R.id.action_about:
                 //dialog?
-                Intent about = new Intent(this,About.class);
+                Intent about = new Intent(this,AboutActivity.class);
                 startActivity(about);
                 return true;
             case R.id.action_report:

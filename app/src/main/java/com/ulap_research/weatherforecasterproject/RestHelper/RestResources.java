@@ -3,6 +3,7 @@ package com.ulap_research.weatherforecasterproject.RestHelper;
 
 public class RestResources {
 
+    // REST HOST
     public static final String HOST = "https://163.221.127.90/wfp_dist/api/v1";
 
     /**

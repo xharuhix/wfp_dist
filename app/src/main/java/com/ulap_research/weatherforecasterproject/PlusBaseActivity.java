@@ -245,7 +245,7 @@ public abstract class PlusBaseActivity extends Activity
         setProgressBarVisible(false);
         onPlusClientSignIn();
 
-        // TODO GET USER EMAIL
+        // TODO: GET USER EMAIL
         //Person currentPerson = mPlusClient.getCurrentPerson();
 
     }
