@@ -25,6 +25,8 @@ import com.ulap_research.weatherforecasterproject.Resources.SharedPrefResources;
 import com.ulap_research.weatherforecasterproject.RestHelper.RestClient;
 import com.ulap_research.weatherforecasterproject.RestHelper.RestResources;
 
+import org.json.JSONObject;
+
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
     private static final String TAG = "MainActivity";
@@ -247,8 +249,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 String userGlobalRank = clientGetUserGlobalRank.getResponse();
                 String sensorsList = clientGetSensorsList.getResponse();
 
-                if (userInfo ==  null || userRank == null || userGlobalRank == null ||
-                        sensorsList == null) {
+                if (new JSONObject(userInfo).getBoolean("error") ||
+                        new JSONObject(userRank).getBoolean("error") ||
+                        new JSONObject(userGlobalRank).getBoolean("error") ||
+                        new JSONObject(sensorsList).getBoolean("error")) {
                     return true;
                 }
                 else {

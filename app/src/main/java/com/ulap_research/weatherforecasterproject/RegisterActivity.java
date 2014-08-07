@@ -255,13 +255,6 @@ public class RegisterActivity extends Activity {
 
             try {
                 client.execute(RestClient.RequestMethod.POST);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            Log.d(TAG, "RegisterActivity code: " + client.getResponseCode() + " msg: " + client.getErrorMessage());
-
-            try {
                 JSONObject jObject = new JSONObject(client.getResponse());
 
                 if(!jObject.getBoolean("error")) {
@@ -368,9 +361,14 @@ public class RegisterActivity extends Activity {
                 String userAchievements = clientGetUserAchievements.getResponse();
                 String sensorsList = clientGetSensorsList.getResponse();
 
-                if (userInfo ==  null || userRank == null || userGlobalRank == null ||
-                        cropsList == null || userCrops == null || achievementsList == null ||
-                        userAchievements == null || sensorsList == null) {
+                if (new JSONObject(userInfo).getBoolean("error") ||
+                        new JSONObject(userRank).getBoolean("error") ||
+                        new JSONObject(userGlobalRank).getBoolean("error") ||
+                        new JSONObject(cropsList).getBoolean("error") ||
+                        new JSONObject(userCrops).getBoolean("error") ||
+                        new JSONObject(achievementsList).getBoolean("error") ||
+                        new JSONObject(userAchievements).getBoolean("error") ||
+                        new JSONObject(sensorsList).getBoolean("error")) {
                     return true;
                 }
                 else {

@@ -297,7 +297,7 @@ public class DashboardFragmentTab extends Fragment {
                 clientGetUserInfo.execute(RestClient.RequestMethod.GET);
                 String userInfo = clientGetUserInfo.getResponse();
 
-                if (userInfo ==  null) {
+                if (new JSONObject(userInfo).getBoolean("error")) {
                     return true;
                 }
                 else {

@@ -155,7 +155,8 @@ public class AchievementActivity extends Activity {
                 String achievementsList = clientGetAchievementsList.getResponse();
                 String userAchievements = clientGetUserAchievements.getResponse();
 
-                if (achievementsList == null || userAchievements == null) {
+                if (new JSONObject(achievementsList).getBoolean("error")||
+                        new JSONObject(userAchievements).getBoolean("error")) {
                     return true;
                 }
                 else {

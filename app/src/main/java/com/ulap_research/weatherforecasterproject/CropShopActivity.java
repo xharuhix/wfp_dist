@@ -228,7 +228,7 @@ public class CropShopActivity extends Activity {
                 clientGetCropsList.execute(RestClient.RequestMethod.GET);
 
                 String cropsList = clientGetCropsList.getResponse();
-                if (cropsList == null) {
+                if (new JSONObject(cropsList).getBoolean("error")) {
                     return true;
                 }
                 else {
@@ -281,7 +281,8 @@ public class CropShopActivity extends Activity {
                 String userInfo = clientGetUserInfo.getResponse();
                 String userCrops = clientGetUserCrops.getResponse();
 
-                if (userInfo ==  null || userCrops == null) {
+                if (new JSONObject(userInfo).getBoolean("error") ||
+                        new JSONObject(userCrops).getBoolean("error")) {
                     return true;
                 }
                 else {
