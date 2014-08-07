@@ -1,5 +1,6 @@
-##Plounge (Weather Forecaster Project)
-For Distribution
+##Plounge
+Weather Forecaster Project For Distribution
+
 
 
 ###Build
