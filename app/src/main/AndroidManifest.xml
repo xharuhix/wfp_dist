@@ -3,7 +3,8 @@
     package="com.ulap_research.weatherforecasterproject" >
 
     <!-- <uses-sdk android:minSdkVersion="11" /> -->
-
+    <!-- Use vibration -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- To access the internet -->
     <uses-permission android:name="android.permission.INTERNET" />
