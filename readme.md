@@ -1,7 +1,5 @@
-##Plounge
+#Plounge
 Weather Forecaster Project For Distribution
-
-
 
 ###Build
 Before compiling please change the **REST web service API Host Name** in
