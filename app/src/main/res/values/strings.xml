@@ -146,7 +146,7 @@
 
     <!-- String about upload data service -->
     <string name="upload_confirm_title">Upload data</string>
-    <string name="upload_confirm_detail">Do you really want to start uploading sensor data\n\n<b>60 uploaded data = 1 cloud point</b></string>
+    <string name="upload_confirm_detail">Do you really want to start uploading sensor data?\n\n<b>60 uploaded data = 1 cloud point</b></string>
     <string name="upload_confirm_start">Start</string>
     <string name="upload_start_noti">Start uploading data</string>
     <string name="upload_start_noti_title">Uploading data to server</string>
