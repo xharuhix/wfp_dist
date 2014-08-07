@@ -169,13 +169,13 @@ public class WeatherFragmentTab extends Fragment {
                 // check null
                 String snippetText = "";
                 if(!sensorObject.getString("pressure").equalsIgnoreCase("null")) {
-                    snippetText += "Pressure: " + sensorObject.getString("pressure");
+                    snippetText += "Pressure: " + sensorObject.getString("pressure") + "\n";
                 }
                 if(!sensorObject.getString("humidity").equalsIgnoreCase("null")) {
-                    snippetText += "\nHumidity: " + sensorObject.getString("humidity");
+                    snippetText += "Humidity: " + sensorObject.getString("humidity") + "\n";
                 }
                 if(!sensorObject.getString("proximity").equalsIgnoreCase("null")) {
-                    snippetText += "\nProximity: " + sensorObject.getString("proximity");
+                    snippetText += "Proximity: " + sensorObject.getString("proximity");
                 }
 
                 map.addMarker(new MarkerOptions()
