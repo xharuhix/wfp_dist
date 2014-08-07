@@ -67,6 +67,7 @@ public class RegisterActivity extends Activity {
         mEmailView = (EditText) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
 
+        // set button on keyboard IME
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -83,6 +84,7 @@ public class RegisterActivity extends Activity {
             }
         });
 
+        // set register button listener
         Button registerButton = (Button) findViewById(R.id.register_button);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,12 +99,18 @@ public class RegisterActivity extends Activity {
         });
     }
 
+    /**
+     * function to start main activity after successfully login
+     */
     private void startMain(){
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);
         this.finish();
     }
 
+    /**
+     * show progress dialog
+     */
     public void showProgress(final boolean show) {
         if(show) {
             progressDialog.show();
@@ -112,6 +120,9 @@ public class RegisterActivity extends Activity {
         }
     }
 
+    /**
+     * Check network
+     */
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -191,6 +202,9 @@ public class RegisterActivity extends Activity {
         }
     }
 
+    /**
+     * Check valid username & email
+     */
     private boolean isUsernameValid(String username) {
         return username.matches("^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$") && username.length()<=20 && username.length()>=6;
     }

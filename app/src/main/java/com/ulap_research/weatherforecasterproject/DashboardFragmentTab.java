@@ -218,6 +218,7 @@ public class DashboardFragmentTab extends Fragment {
             String username = jObject.getString("username").substring(0, 1).toUpperCase() + jObject.getString("username").substring(1).toLowerCase();
             tvUsername.setText(username + " (" + jObject.getString("alias") +")");
 
+            // set level, exp for next level, cloud point, rain amount
             tvLevel.setText(getString(R.string.dashboard_level) + " " + jObject.getInt("level"));
             tvExpRequire.setText(jObject.getInt("toNextLevel") + " " + getString(R.string.dashboard_exp_next_level));
             tvCloudPoint.setText(getString(R.string.dashboard_cloud_point) + " " + jObject.getInt("cloudPoint") + " " + getString(R.string.dashboard_cloud_point_unit));

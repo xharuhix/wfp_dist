@@ -61,8 +61,9 @@ public class RainShopActivity extends Activity {
         lvRain.setAdapter(adapter);
         lvRain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View arg1, final int position, long id) {
-
+                // check network
                 if (isNetworkAvailable()) {
+                    // show dialog to ask user confirmation
                     new AlertDialog.Builder(RainShopActivity.this)
                             .setTitle(rainAmount[position] + " " + getString(R.string.rain_unit_desc))
                             .setMessage(R.string.rain_buy_confirm)

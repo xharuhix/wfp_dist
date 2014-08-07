@@ -113,9 +113,11 @@ public class MyGardenActivity extends Activity {
         try {
             JSONObject jUserCropObject = new JSONObject(sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_CROPS, ""));
 
+            // read object crops
             JSONArray jUserCrops = jUserCropObject.getJSONArray("crops");
             if(jUserCrops.length() > 0) {
                 for (int i = 0; i < jUserCrops.length(); i++) {
+                    // read each value in object
                     JSONObject jUserCrop = jUserCrops.getJSONObject(i);
                     cropId.add(jUserCrop.getInt("cropId"));
                     cropOwnedId.add(jUserCrop.getInt("cropOwnedId"));
@@ -159,7 +161,7 @@ public class MyGardenActivity extends Activity {
                                     cropMenuDialog.cancel();
                                     switch (arg2) {
                                         case 0:
-                                        // water crop
+                                        // user choose to water crop
                                             // set dialog
                                             final Dialog rainListDialog = new Dialog(MyGardenActivity.this);
                                             rainListDialog.requestWindowFeature(cropMenuDialog.getWindow().FEATURE_NO_TITLE);
@@ -202,7 +204,7 @@ public class MyGardenActivity extends Activity {
                                             rainListDialog.show();
                                             break;
                                         case 1:
-                                        // sell crop
+                                        // user choose to sell crop
                                             // set message
                                             progressDialog.setMessage(getString(R.string.crop_get_price_loading));
                                             showProgress(true);
@@ -222,6 +224,7 @@ public class MyGardenActivity extends Activity {
                 });
             }
             else {
+                // show text if there is no crop in the garden
                 String[] str = { getString(R.string.garden_no_crop) };
                 lvCrop.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, str));
                 lvCrop.setSelector(new ColorDrawable(0));
@@ -265,8 +268,10 @@ public class MyGardenActivity extends Activity {
         }
 
         protected void onPostExecute(Boolean error) {
+            // after request was done
             showProgress(false);
             if(!error) {
+                // show dialog to ask a user for selling confirmation
                 new AlertDialog.Builder(MyGardenActivity.this)
                         .setTitle(R.string.crop_sell_title)
                         .setMessage(getString(R.string.crop_sell_confirm) + " " + cropSellPrice + " "

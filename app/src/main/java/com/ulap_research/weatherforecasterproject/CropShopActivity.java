@@ -98,6 +98,8 @@ public class CropShopActivity extends Activity {
         ArrayList<String> cropDesc = new ArrayList<String>();
         ArrayList<Integer> cropRarity = new ArrayList<Integer>();
         ArrayList<Integer> cropPrice = new ArrayList<Integer>();
+
+        // set crop image
         int[] cropImageId = {R.drawable.kayaitch, R.drawable.stratocus, R.drawable.pyroms,
                 R.drawable.lenticules, R.drawable.rollarcs, R.drawable.virgarils, R.drawable.shafalds,
                 R.drawable.malmalus, R.drawable.noctils, R.drawable.nacres};

@@ -57,10 +57,14 @@ public class UploadDataService extends Service {
         // setup shared preferences
         sharedPref = this.getSharedPreferences(SharedPrefResources.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
 
+        // set handler for thread
         mHandler = new Handler();
+
+        // set object of sensor data reading class
         enviSensorManager = EnviSensorManager.getInstance(this.getApplicationContext());
         sensor3GWifiManager = Sensor3GWifiManager.getInstance(this.getApplicationContext());
 
+        // enable GPS location
         initLocation();
         mBestLocationProvider.startLocationUpdatesWithListener(mBestLocationListener);
 
@@ -91,6 +95,7 @@ public class UploadDataService extends Service {
         mBuilder.setContentIntent(resultPendingIntent);
         // set notification
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // start notification
         mNotificationManager.notify(UPLOAD_NOTI_ID, mBuilder.build());
     }
 
@@ -99,6 +104,7 @@ public class UploadDataService extends Service {
         super.onStartCommand(intent, flags, startId);
         Log.i(TAG, "Service started");
 
+        // run thread to upload data every 1 sec
         uploadDataThread = new Thread()
         {
             @Override
@@ -225,6 +231,7 @@ public class UploadDataService extends Service {
                               String accelerationZ, String accelerationY, String accelerationX,
                               String magnetismZ, String magnetismY, String magnetismX,
                               String threeGSignal, String wifiSignal, String altitude, String light) {
+            // get all sensor data
             this.timestamp = timestamp;
             this.latitude = latitude;
             this.longitude = longitude;
@@ -251,7 +258,7 @@ public class UploadDataService extends Service {
         protected Boolean doInBackground(Void... params) {
             String apiKey = sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY, "");
 
-            // Upload data
+            // Upload data to the server using REST API
             RestClient client = new RestClient(RestResources.UPLOAD_SENSOR_DATA);
             client.addHeader("Authorization", apiKey);
             client.addParam("timestamp", timestamp);
@@ -288,6 +295,7 @@ public class UploadDataService extends Service {
         }
 
         protected void onPostExecute(Boolean error) {
+            // if error stop uploading and show notification
             if(error) {
                 sharedPref.edit().putBoolean(SharedPrefResources.PREFERENCE_KEY_UPLOAD_START, false).commit();
                 showErrorNoti();
@@ -296,6 +304,9 @@ public class UploadDataService extends Service {
         }
     }
 
+    /**
+     * Error notification when something went wrong
+     */
     private void showErrorNoti(){
         // Start notification
         NotificationCompat.Builder mBuilder =

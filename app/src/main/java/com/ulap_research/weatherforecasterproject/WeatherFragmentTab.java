@@ -82,6 +82,7 @@ public class WeatherFragmentTab extends Fragment {
     public void onResume() {
         super.onResume();
 
+        // enable GPS
         initLocation();
         mBestLocationProvider.startLocationUpdatesWithListener(mBestLocationListener);
 
@@ -89,9 +90,10 @@ public class WeatherFragmentTab extends Fragment {
             map = fragment.getMap();
             map.setMyLocationEnabled(true);
 
-            // set custom info windows
+            // set custom info windows (snippet)
             map.setInfoWindowAdapter(new MyInfoWindowAdapter());
 
+            // check if user provide location or not
             if(latitude != null && longitude != null) {
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(
                         new LatLng(latitude, longitude), 12.0f));
@@ -135,6 +137,7 @@ public class WeatherFragmentTab extends Fragment {
 
                 public void onLocationUpdate(Location location, BestLocationProvider.LocationType type
                         , boolean isFresh) {
+                    // update GPS location
                       latitude = location.getLatitude();
                       longitude = location.getLongitude();
                 }
@@ -186,6 +189,9 @@ public class WeatherFragmentTab extends Fragment {
         }
     }
 
+    /**
+     * Class for setting Map Information Snippet
+     */
     class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         private final View myContentsView;
 

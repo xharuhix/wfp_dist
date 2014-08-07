@@ -61,6 +61,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setHomeButtonEnabled(false);
 
+        // text for tab
         String[] tabs = { getString(R.string.main_tab_dashboard),
                 getString(R.string.main_tab_ranking),
                 getString(R.string.main_tab_weather)};
