@@ -38,6 +38,7 @@ public class CropShopActivity extends Activity {
 
     // progress dialog
     private ProgressDialog progressDialog;
+    private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreflistener;
 
     // views
     private ListView lvCropList;
@@ -55,14 +56,40 @@ public class CropShopActivity extends Activity {
         // setup shared preferences
         sharedPref = this.getSharedPreferences(SharedPrefResources.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
 
+        // set OnSharedPreferenceChangeListener listener
+        onSharedPreflistener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                if (key.equals(SharedPrefResources.PREFERENCE_KEY_JSON_CROPS_LIST)) {
+                    updateCropList();
+                    Log.d(TAG, "SharedPref PREFERENCE_KEY_JSON_CROPS_LIST has changed");
+                }
+            }
+        };
+
         // start to fetch data
         GetCropListTask task = new GetCropListTask();
         task.execute((Void) null);
 
         // setup view
         lvCropList = (ListView) findViewById(R.id.list_crops);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // set onSharedPref changed listener
+        sharedPref.registerOnSharedPreferenceChangeListener(onSharedPreflistener);
 
         updateCropList();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // unset onSharedPref changed listener
+        sharedPref.unregisterOnSharedPreferenceChangeListener(onSharedPreflistener);
     }
 
     private void updateCropList() {
@@ -169,8 +196,8 @@ public class CropShopActivity extends Activity {
             if(!error) {
                 Toast.makeText(CropShopActivity.this, R.string.crop_planted_success, Toast.LENGTH_SHORT).show();
                 // refresh user info & crops
-                RefreshUserInfoTask refreshTak = new RefreshUserInfoTask();
-                refreshTak.execute((Void) null);
+                RefreshUserInfoTask refreshTask = new RefreshUserInfoTask();
+                refreshTask.execute((Void) null);
             }
             else {
                 showProgress(false);

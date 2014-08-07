@@ -1,8 +1,14 @@
 package com.ulap_research.weatherforecasterproject;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,12 +17,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ulap_research.weatherforecasterproject.Resources.SharedPrefResources;
+import com.ulap_research.weatherforecasterproject.RestHelper.RestClient;
+import com.ulap_research.weatherforecasterproject.RestHelper.RestResources;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +45,8 @@ public class DashboardFragmentTab extends Fragment {
     private TextView tvRainAmount;
     private ProgressBar levelProgressBar;
     private ListView menuListView;
+
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,8 +70,17 @@ public class DashboardFragmentTab extends Fragment {
                     updateDashboard();
                     Log.d(TAG, "SharedPref PREFERENCE_KEY_JSON_USER_INFO has changed");
                 }
+                if (key.equals(SharedPrefResources.PREFERENCE_KEY_UPLOAD_START)) {
+                    setMenuListView();
+                    Log.d(TAG, "SharedPref PREFERENCE_KEY_UPLOAD_START has changed");
+                }
             }
         };
+
+        // Set up progress dialog
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getString(R.string.upload_calculating_point_message)); // message
+        progressDialog.setCancelable(false);
 
         // setup views
         tvUsername = (TextView) getView().findViewById(R.id.username);
@@ -70,11 +90,22 @@ public class DashboardFragmentTab extends Fragment {
         tvRainAmount = (TextView) getView().findViewById(R.id.rainAmount);
         levelProgressBar = (ProgressBar) getView().findViewById(R.id.levelProgressBar);
 
+        // setup menu
+        setMenuListView();
+    }
+
+    public void setMenuListView() {
         // load strings menu
-        String[] str = { getString(R.string.nav_menu_upload_data),
+        final String[] str = {"",
                 getString(R.string.nav_menu_garden),
                 getString(R.string.nav_menu_buy_rain),
                 getString(R.string.nav_menu_achievements)};
+        if(!sharedPref.getBoolean(SharedPrefResources.PREFERENCE_KEY_UPLOAD_START, false)) {
+            str[0] = getString(R.string.nav_menu_start_upload_data);
+        }
+        else {
+            str[0] = getString(R.string.nav_menu_stop_upload_data);
+        }
 
         // set list view navigation menu
         menuListView = (ListView)getView().findViewById(R.id.list_menu);
@@ -85,8 +116,46 @@ public class DashboardFragmentTab extends Fragment {
                 Intent intent;
                 switch(arg2) {
                     case 0 :
-                        //TODO
-                        Toast.makeText(getActivity(), "TODO: upload data", Toast.LENGTH_SHORT).show();
+                        // check network connection before start
+                        if(isNetworkAvailable()) {
+                            final Intent service = new Intent(getActivity(), UploadDataService.class);
+                            // start uploading
+                            if (!sharedPref.getBoolean(SharedPrefResources.PREFERENCE_KEY_UPLOAD_START, false)) {
+                                // set stop text at menu
+                                new AlertDialog.Builder(getActivity())
+                                    .setTitle(R.string.upload_confirm_title)
+                                    .setMessage(R.string.upload_confirm_detail)
+                                    .setPositiveButton(R.string.upload_confirm_start, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                        str[0] = getString(R.string.nav_menu_stop_upload_data);
+                                        ((BaseAdapter) menuListView.getAdapter()).notifyDataSetChanged();
+
+                                        sharedPref.edit().putBoolean(SharedPrefResources.PREFERENCE_KEY_UPLOAD_START, true).commit();
+                                        getActivity().startService(service);
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, null)
+                                    .show();
+                            }
+                            // stop uploading
+                            else {
+                                // set start text at menu
+                                str[0] = getString(R.string.nav_menu_start_upload_data);
+                                ((BaseAdapter) menuListView.getAdapter()).notifyDataSetChanged();
+
+                                sharedPref.edit().putBoolean(SharedPrefResources.PREFERENCE_KEY_UPLOAD_START, false).commit();
+                                getActivity().stopService(service);
+
+                                showProgress(true);
+
+                                // calculate point
+                                calculateCloudPointTask task = new calculateCloudPointTask();
+                                task.execute((Void) null);
+                            }
+                        }
+                        else {
+                            Toast.makeText(getActivity(), R.string.error_network_connection, Toast.LENGTH_LONG).show();
+                        }
                         break;
                     case 1 :
                         intent = new Intent(getActivity(), MyGardenActivity.class);
@@ -105,7 +174,6 @@ public class DashboardFragmentTab extends Fragment {
         });
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -123,6 +191,22 @@ public class DashboardFragmentTab extends Fragment {
 
         // unset onSharedPref changed listener
         sharedPref.unregisterOnSharedPreferenceChangeListener(onSharedPreflistener);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    public void showProgress(final boolean show) {
+        if(show) {
+            progressDialog.show();
+        }
+        else if(progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     private void updateDashboard() {
@@ -151,4 +235,89 @@ public class DashboardFragmentTab extends Fragment {
         }
     }
 
+    /**
+     * An asynchronous to calculate cloud point after user uploaded sensor data task
+     */
+    public class calculateCloudPointTask extends AsyncTask<Void, Void, Boolean> {
+        private JSONObject jObject;
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            String apiKey = sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY, "");
+
+            RestClient client = new RestClient(RestResources.UPDATE_CLOUD_POINT);
+            client.addHeader("Authorization", apiKey);
+
+            try {
+                client.execute(RestClient.RequestMethod.POST);
+
+                jObject = new JSONObject(client.getResponse());
+                return jObject.getBoolean("error");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        protected void onPostExecute(Boolean error) {
+            int numUploadedData = 0;
+            int cloudPointGain = 0;
+            try {
+                numUploadedData = jObject.getInt("numUploadedData");
+                cloudPointGain = jObject.getInt("cloudPointGain");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(getActivity(), getString(R.string.upload_result) + " " + numUploadedData + " "
+                    + getString(R.string.upload_result_unit) + " \n" + getString(R.string.upload_cloud_point_result) + " "
+                    + cloudPointGain + " " + getString(R.string.upload_cloud_point_result_unit), Toast.LENGTH_LONG).show();
+            RefreshUserInfoTask task = new RefreshUserInfoTask();
+            task.execute((Void) null);
+        }
+    }
+
+    /*
+     *  Task for refreshing user info
+     */
+    public class RefreshUserInfoTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            String apiKey = sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY, "");
+
+            /*
+             *   Set up REST request
+             */
+            // Get user info
+            RestClient clientGetUserInfo = new RestClient(RestResources.GET_USER_INFO_URL);
+            clientGetUserInfo.addHeader("Authorization", apiKey);
+
+            try {
+                clientGetUserInfo.execute(RestClient.RequestMethod.GET);
+                String userInfo = clientGetUserInfo.getResponse();
+
+                if (userInfo ==  null) {
+                    return true;
+                }
+                else {
+                    // put data to shared preferences
+                    sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_JSON_USER_INFO, userInfo).commit();
+                    // debug
+                    Log.d(TAG, userInfo);
+                    return false;
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        protected void onPostExecute(Boolean error) {
+            showProgress(false);
+            if(error){
+                Toast.makeText(getActivity(), R.string.error_cannot_fetch, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }

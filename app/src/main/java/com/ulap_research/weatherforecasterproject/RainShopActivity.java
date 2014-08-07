@@ -102,15 +102,19 @@ public class RainShopActivity extends Activity {
     /*
      *  Task for requesting to buy rain
      */
-    public class BuyRainTask extends AsyncTask<Void, Void, Boolean> {
+    public class BuyRainTask extends AsyncTask<Void, Void, Integer> {
         private double mRainAmount;
+
+        private static final int SUCCESS = 0;
+        private static final int FAIL = 1;
+        private static final int ERROR = 2;
 
         public BuyRainTask(double rainAmount) {
             mRainAmount = rainAmount;
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected Integer doInBackground(Void... params) {
             String apiKey = sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY, "");
 
             // Send request to buy rain
@@ -122,23 +126,32 @@ public class RainShopActivity extends Activity {
                 client.execute(RestClient.RequestMethod.POST);
 
                 JSONObject jObject = new JSONObject(client.getResponse());
-                return jObject.getBoolean("error");
+                if(!jObject.getBoolean("error")) {
+                    return SUCCESS;
+                }
+                else {
+                    return FAIL;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return true;
+            return ERROR;
         }
 
-        protected void onPostExecute(Boolean error) {
-            if(!error) {
+        protected void onPostExecute(Integer errorCode) {
+            if(errorCode == SUCCESS) {
                 Toast.makeText(RainShopActivity.this, R.string.rain_brought_success, Toast.LENGTH_SHORT).show();
                 // refresh user info
                 RefreshUserInfoTask refreshTak = new RefreshUserInfoTask();
                 refreshTak.execute((Void) null);
             }
-            else {
+            else if(errorCode == FAIL) {
                 showProgress(false);
                 Toast.makeText(RainShopActivity.this, R.string.rain_brought_fail, Toast.LENGTH_SHORT).show();
+            }
+            else if(errorCode == ERROR) {
+                showProgress(false);
+                Toast.makeText(RainShopActivity.this, R.string.error_something_went_wrong, Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -253,7 +253,6 @@ public class RegisterActivity extends Activity {
                 if(!jObject.getBoolean("error")) {
                     // get API key from the response
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_APIKEY, jObject.getString("apiKey")).commit();
-                    Log.d(TAG, sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY,""));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

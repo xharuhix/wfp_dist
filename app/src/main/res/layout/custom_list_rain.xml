@@ -14,7 +14,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
-        android:text="0.5 Litres of rain"
         style="?android:textAppearanceMedium"
         android:textStyle="bold"/>
 
@@ -26,7 +25,8 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="15dp"
-        android:text="10 Cloud points"
+        android:textStyle="bold"
+        android:textColor="#33B5E5"
         style="?android:textAppearanceSmall"/>
 
 </FrameLayout>

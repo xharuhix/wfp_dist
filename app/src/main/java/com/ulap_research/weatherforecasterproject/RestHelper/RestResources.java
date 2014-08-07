@@ -1,14 +1,13 @@
 package com.ulap_research.weatherforecasterproject.RestHelper;
 
-/**
- * Created by Soranut on 7/29/2014.
- */
+
 public class RestResources {
 
-    public static final String HOST = "https://163.221.124.255/wfp_dist/api/v1";
+    public static final String HOST = "https://163.221.127.90/wfp_dist/api/v1";
 
-    // REST URL
-
+    /**
+     * REST URL
+     */
     // User management
     public static final String REGISTER_URL = HOST + "/users/register";
     public static final String LOGIN_URL = HOST + "/users/login";
@@ -34,5 +33,18 @@ public class RestResources {
 
     // Plant crop
     public static final String PLANT_CROP = HOST + "/crops/plant";
+
+    // Sell crop
+    public static final String GET_CROP_SELL_PRICE = HOST + "/users/crops/sell_price/";
+    public static final String SELL_CROP = HOST + "/users/crops/sell";
+
+    // Water crop
+    public static final String WATER_CROP = HOST + "/users/rain/use";
+
+    // Upload sensor data
+    public static final String UPLOAD_SENSOR_DATA = HOST + "/sensors/upload";
+
+    // Update cloud point after uploaded data
+    public static final String UPDATE_CLOUD_POINT = HOST + "/users/cloud_point/update";
 
 }

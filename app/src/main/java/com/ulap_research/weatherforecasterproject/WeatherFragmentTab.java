@@ -22,6 +22,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.ulap_research.weatherforecasterproject.BestLocation.BestLocationListener;
+import com.ulap_research.weatherforecasterproject.BestLocation.BestLocationProvider;
 import com.ulap_research.weatherforecasterproject.Resources.SharedPrefResources;
 
 import org.json.JSONArray;
@@ -35,8 +37,14 @@ public class WeatherFragmentTab extends Fragment {
     private SharedPreferences sharedPref;
     private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreflistener;
 
+    BestLocationProvider mBestLocationProvider;
+    BestLocationListener mBestLocationListener;
+
     private SupportMapFragment fragment;
     private GoogleMap map;
+
+    private Double latitude = null;
+    private Double longitude = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,6 +81,10 @@ public class WeatherFragmentTab extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        initLocation();
+        mBestLocationProvider.startLocationUpdatesWithListener(mBestLocationListener);
+
         if (map == null) {
             map = fragment.getMap();
             map.setMyLocationEnabled(true);
@@ -80,13 +92,9 @@ public class WeatherFragmentTab extends Fragment {
             // set custom info windows
             map.setInfoWindowAdapter(new MyInfoWindowAdapter());
 
-            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-
-            Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-            if (location != null) {
+            if(latitude != null && longitude != null) {
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(location.getLatitude(), location.getLongitude()), 12.0f));
+                        new LatLng(latitude, longitude), 12.0f));
             }
             else {
                 Toast.makeText(getActivity(), R.string.error_cannot_get_location, Toast.LENGTH_SHORT).show();
@@ -108,6 +116,37 @@ public class WeatherFragmentTab extends Fragment {
         sharedPref.unregisterOnSharedPreferenceChangeListener(onSharedPreflistener);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // stop GPS
+        mBestLocationProvider.stopLocationUpdates();
+    }
+
+    public void initLocation(){
+        if(mBestLocationListener == null){
+            mBestLocationListener = new BestLocationListener() {
+                public void onStatusChanged(String provider, int status
+                        , Bundle extras) { }
+                public void onProviderEnabled(String provider) { }
+                public void onProviderDisabled(String provider) { }
+                public void onLocationUpdateTimeoutExceeded(BestLocationProvider.LocationType type) { }
+
+                public void onLocationUpdate(Location location, BestLocationProvider.LocationType type
+                        , boolean isFresh) {
+                      latitude = location.getLatitude();
+                      longitude = location.getLongitude();
+                }
+            };
+
+            if(mBestLocationProvider == null){
+                mBestLocationProvider = new BestLocationProvider(getActivity()
+                        , true, true, 10000, 1000, 2, 0);
+            }
+        }
+    }
+
     private void updateMapMarker() {
         try {
             // get ranking from JSON and update text view
@@ -120,16 +159,26 @@ public class WeatherFragmentTab extends Fragment {
             for (int i=0; i < jArray.length(); i++) {
                 JSONObject sensorObject = jArray.getJSONObject(i);
                 // Pulling sensor data from the array
-                double lad = sensorObject.getDouble("ladtitude");
-                double lon = sensorObject.getDouble("longtitude");
+                double lad = sensorObject.getDouble("latitude");
+                double lon = sensorObject.getDouble("longitude");
                 String time = sensorObject.getString("timestamp");
+
+                // check null
+                String snippetText = "";
+                if(!sensorObject.getString("pressure").equalsIgnoreCase("null")) {
+                    snippetText += "Pressure: " + sensorObject.getString("pressure");
+                }
+                if(!sensorObject.getString("humidity").equalsIgnoreCase("null")) {
+                    snippetText += "\nHumidity: " + sensorObject.getString("humidity");
+                }
+                if(!sensorObject.getString("proximity").equalsIgnoreCase("null")) {
+                    snippetText += "\nProximity: " + sensorObject.getString("proximity");
+                }
 
                 map.addMarker(new MarkerOptions()
                         .position(new LatLng(lad, lon))
                         .title(time)
-                        .snippet("Pressure: " + sensorObject.getString("pressure") + "\n" +
-                                "Humidity: " + sensorObject.getString("humidity") + "\n" +
-                                "Proximity: " + sensorObject.getString("proximity")));
+                        .snippet(snippetText));
             }
 
         } catch (JSONException e) {

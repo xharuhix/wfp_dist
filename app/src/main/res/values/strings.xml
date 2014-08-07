@@ -3,7 +3,6 @@
 
     <string name="app_name">Plounge</string>
     <string name="action_refresh">Refresh</string>
-    <string name="action_settings">Settings</string>
     <string name="action_about">About ULAP</string>
     <string name="action_report">Report bug</string>
     <string name="action_logout">Logout</string>
@@ -25,7 +24,26 @@
     <string name="error_network_connection">Please connect to the network</string>
 
     <!-- Strings related to welcome page -->
-    <string name="welcome_intro"><b>Plounge Terms of Service</b>\n\nbrought to you by ULAP Research\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tempor nisi lorem, vitae gravida orci molestie sed. Etiam non molestie arcu. In nec ornare neque. Nulla ac dapibus eros. Phasellus tincidunt viverra tortor ac pharetra. Nam ut rhoncus mauris. Pellentesque ullamcorper adipiscing mauris, vitae dictum nulla laoreet a.\n\nProin vel pharetra elit. Nunc vehicula sapien et erat dictum porta. Cras enim neque, vulputate quis libero in, mattis accumsan eros. Phasellus justo neque, interdum ut elit eu, dignissim sodales velit. Aliquam et mollis diam. Nam vitae scelerisque elit, quis venenatis risus. In ac quam consequat, egestas metus quis, tempor lorem. In mauris leo, scelerisque eget tincidunt at, euismod eu diam.\n\nPraesent suscipit magna eu rhoncus consectetur. Suspendisse potenti. Nulla rhoncus enim in volutpat condimentum. Suspendisse odio felis, placerat gravida massa ut, consectetur malesuada ante. In viverra risus vitae massa semper, sed auctor leo ullamcorper. Fusce non interdum libero. Nam vitae congue metus. Nam faucibus neque justo, a blandit ipsum tempor sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam suscipit tellus arcu, sit amet cursus arcu imperdiet et. Nam vel ultricies libero. Vivamus velit lacus, suscipit a consequat eu, sodales eget ante.</string>
+    <string name="welcome_intro"><b>Welcome to Plounge!</b>\n\nPlounge enables you to volunteer environmental
+        data such as pressure, humidity, and temperature with the built-in sensors from your mobile device.
+        At the same time, it will also try to collect context data (physical activity and the condition of
+        the surrounding environment) from your phone\'s built accelerometer, gyroscope, light sensor, and
+        proximity sensor. This is so we can reliably provide these environmental data to everyone :)
+        In addition, we try to process these information so we can better understand the localized heavy
+        rain phenomenon. With your help, we can obtain a lot of information that is helpful for this research.
+        \n\n<b>What if I don\'t have those sensors?</b>\nNot to worry we are still interested in your context
+        data since we also look into crowd movement in identifying local heavy rain events.\n\n<b>What kind
+        of information are you getting from my phone?</b>\nEnvironmental: pressure, humidity, temperature,
+        light, proximity\nPosition: GPS (optional, but we\'d still like to know where you are measuring from),
+        WiFi-based location\nMotion: Accelerometer, gyroscope\n\n<b>Why does it require username, email, and
+        password?</b>\nSo we can try to make it as secure as possible. At the same time, we try to monitor
+        bad guys in messing up with our system. Don\'t worry, we don\'t share these details and your password
+        is encrypted.\n\n<b>What do I get from volunteering?</b>\nThe satisfaction and joy of helping researchers
+        in need of data. But wait, there\'s more! If you top the weekly ranking of volunteering the most number
+        of data, you can receive real Seed Money® from ©Leafcutter Designs. We also needed the email so we can
+        contact you through it for this purpose :)\n\n<b>What if I experienced some trouble with the app?</b>
+        \nPlease send us a bug report right away by email through this address: ulap.research@gmail.com
+        \n\nThank you very much\nand happy data volunteering~!</string>
     <string name="welcome_accept_terms">I agree with the terms and conditions</string>
     <string name="welcome_accept_terms_warning">Please accept the terms and conditions</string>
     <string name="welcome_sign_me_up">Sign me up!</string>
@@ -34,8 +52,8 @@
     <string name="title_activity_login_desc">Sign in to Plounge</string>
     <string name="title_activity_register">Register for a new account</string>
     <string name="title_activity_register_desc">Please fill in your information</string>
-    <string name="loading_message">Loading. Please wait…</string>
-    <string name="initializing_message">Initializing. Please wait…</string>
+    <string name="loading_message">Loading. Please wait...</string>
+    <string name="initializing_message">Initializing. Please wait...</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -45,20 +63,24 @@
     <string name="plus_sign_out">Switch Google+ account</string>
     <string name="plus_disconnect">Disconnect from Google+</string>
 
-    <!-- Strings in dashboard tab -->
+    <!-- Strings in MainActivity -->
     <string name="nav_menu_title">navigation menu</string>
-    <string name="nav_menu_upload_data">Upload my sensor data</string>
+    <string name="nav_menu_start_upload_data">Start uploading sensor data</string>
+    <string name="nav_menu_stop_upload_data">Stop uploading sensor data</string>
     <string name="nav_menu_garden">Go to my garden</string>
     <string name="nav_menu_buy_rain">Buy more rain</string>
     <string name="nav_menu_achievements">Achievements</string>
+    <string name="successfully_logged_out">Successfully logged out</string>
+
+    <!-- Strings in dashboard tab -->
     <string name="dashboard_level">Level:</string>
-    <string name="dashboard_exp_next_level">EXP to next level</string>
+    <string name="dashboard_exp_next_level">Exp. to next level</string>
     <string name="dashboard_cloud_point">Cloud point:</string>
     <string name="dashboard_cloud_point_unit">points</string>
     <string name="dashboard_rain_amount">Rain amount:</string>
     <string name="dashboard_rain_amount_unit">litres</string>
     <string name="title_activity_rain_shop">Buy more rain</string>
-    <string name="hello_world">Hello world!</string>
+    
 
     <!-- Strings in ranking tab -->
     <string name="user_rank_title">User ranking</string>
@@ -73,7 +95,7 @@
 
     <!-- Strings in rain shop activity -->
     <string name="rain_buy_guide_text">Please select amount of rain to buy</string>
-    <string name="rain_buy_loading">Buying rain. Please wait…</string>
+    <string name="rain_buy_loading">Buying rain. Please wait...</string>
     <string name="rain_unit_desc">Litres of rain</string>
     <string name="rain_cloud_points">cloud points</string>
     <string name="rain_buy_confirm">Do you really want to buy this?</string>
@@ -95,9 +117,47 @@
     <string name="crop_shop_price">Price:</string>
     <string name="crop_shop_cloud_points">cloud points</string>
     <string name="crop_plant_guide_text">Please select crop to plant</string>
-    <string name="crop_plant_loading">Planting crop. Please wait…</string>
+    <string name="crop_plant_loading">Planting crop. Please wait...</string>
     <string name="crop_plant_confirm">Do you really want to plant this crop?</string>
     <string name="crop_planted_success">Successfully planted</string>
     <string name="crop_planted_fail">Not enough cloud point to buy</string>
+
+    <!-- String about taking care of crops OR sell crops -->
+    <string name="crop_menu_desc">What do you want to do?</string>
+    <string name="crop_menu_water">Water this crop</string>
+    <string name="crop_menu_sell">Sell this crop</string>
+
+    <string name="crop_get_price_loading">Calculating price. Please wait...</string>
+    <string name="crop_sell_title">Sell Crop</string>
+    <string name="crop_sell_confirm">You can sell it for</string>
+    <string name="crop_sell_button">Sell</string>
+    <string name="crop_sell_loading">Selling. Please wait...</string>
+    <string name="crop_sold_success">Successfully sold</string>
+
+    <string name="crop_water_title_desc">Please select amount of rain to use</string>
+    <string name="crop_water_unit">litres of rain</string>
+    <string name="crop_water_title">Water Crop</string>
+    <string name="crop_water_button">Water</string>
+    <string name="crop_water_confirm">Do you really want to water with</string>
+    <string name="crop_watered_success">Successfully watered</string>
+    <string name="crop_watered_fail">Not enough rain amount</string>
+    <string name="crop_watered_max_level">This crop is already in MAX level</string>
+    <string name="crop_water_loading">Watering. Please wait...</string>
+
+    <!-- String about upload data service -->
+    <string name="upload_confirm_title">Upload data</string>
+    <string name="upload_confirm_detail">Do you really want to start uploading sensor data\n\n<b>60 uploaded data = 1 cloud point</b></string>
+    <string name="upload_confirm_start">Start</string>
+    <string name="upload_start_noti">Start uploading data</string>
+    <string name="upload_start_noti_title">Uploading data to server</string>
+    <string name="upload_fail_noti">Cannot connect to server</string>
+    <string name="upload_fail_noti_desc">Fail to upload data</string>
+    <string name="upload_noti_open_app">"Tap to open Plounge</string>
+    <string name="upload_result">You uploaded</string>
+    <string name="upload_result_unit">records</string>
+    <string name="upload_cloud_point_result">and gained</string>
+    <string name="upload_cloud_point_result_unit">cloud points</string>
+    <string name="upload_calculating_point_message">Calculating cloud point. Please wait...</string>
+
 
 </resources>

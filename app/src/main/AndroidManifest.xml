@@ -8,7 +8,7 @@
     <!-- To access the internet -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- To write cache of Google Maps -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- To use Google Maps service -->
@@ -24,9 +24,6 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <!-- To retrieve the account name (email) as part of sign-in: -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <!-- To use Google Map, user device must support openGL2 -->
     <uses-feature
@@ -54,10 +51,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Settings"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
             android:name=".About"
             android:label="@string/app_name" >
         </activity>
@@ -83,10 +76,12 @@
 
         <activity
             android:name=".MyGardenActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_my_garden_acitivity" >
         </activity>
         <activity
             android:name=".RainShopActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_rain_shop" >
         </activity>
         <activity
@@ -95,8 +90,14 @@
         </activity>
         <activity
             android:name=".CropShopActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_crop_shop" >
         </activity>
+
+        <service
+            android:name=".UploadDataService"
+            android:enabled="true" >
+        </service>
     </application>
 
 </manifest>

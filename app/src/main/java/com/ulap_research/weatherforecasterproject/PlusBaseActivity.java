@@ -10,7 +10,10 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.plus.model.people.Person;
 import com.ulap_research.weatherforecasterproject.R;
 
 /**
@@ -241,6 +244,10 @@ public abstract class PlusBaseActivity extends Activity
         updateConnectButtonState();
         setProgressBarVisible(false);
         onPlusClientSignIn();
+
+        // TODO GET USER EMAIL
+        //Person currentPerson = mPlusClient.getCurrentPerson();
+
     }
 
     /**

@@ -5,8 +5,9 @@ public class SharedPrefResources {
     public static final String PREFERENCE_FILE_KEY = "com.ulap_research.weatherforecasterproject.pref_key";
 
     public static final String PREFERENCE_KEY_APIKEY = "com.tuntunkun.weatherforecaster.api_key";
-
     public static final String PREFERENCE_KEY_ACCEPT_TOS = "com.tuntunkun.weatherforecaster.accept_tos";
+
+    public static final String PREFERENCE_KEY_UPLOAD_START = "com.tuntunkun.weatherforecaster.upload_start";
 
     // user info
     public static final String PREFERENCE_KEY_JSON_USER_INFO = "com.tuntunkun.weatherforecaster.json_user_info";

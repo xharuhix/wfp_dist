@@ -7,15 +7,14 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/crop_menu_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/crop_menu_desc"
+        android:text="@string/crop_water_title_desc"
         style="?android:listSeparatorTextViewStyle"/>
 
     <ListView
-        android:id="@+id/list_crop_menu"
+        android:id="@+id/list_rain_to_use"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

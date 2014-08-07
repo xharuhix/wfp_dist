@@ -1,8 +1,8 @@
-package at.theengine.android.bestlocation;
+package com.ulap_research.weatherforecasterproject.BestLocation;
 
 import android.location.Location;
 import android.os.Bundle;
-import at.theengine.android.bestlocation.BestLocationProvider.LocationType;
+import com.ulap_research.weatherforecasterproject.BestLocation.BestLocationProvider.LocationType;
 
 public abstract class BestLocationListener {
 

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.plus.model.people.Person;
 import com.ulap_research.weatherforecasterproject.Resources.SharedPrefResources;
 import com.ulap_research.weatherforecasterproject.RestHelper.RestClient;
 import com.ulap_research.weatherforecasterproject.RestHelper.RestResources;
@@ -59,10 +60,13 @@ public class LoginActivity extends PlusBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // TODO Check if user already logged in or not (from api key)
-
         // Set up SharedPreferences
         sharedPref = this.getSharedPreferences(SharedPrefResources.PREFERENCE_FILE_KEY, MODE_PRIVATE);
+
+        // Check if user already logged in or not (from api key)
+        if(!sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY, "").equals("")) {
+            startMain();
+        }
 
         // Set up progress dialog
         progressDialog = new ProgressDialog(this);
@@ -204,7 +208,7 @@ public class LoginActivity extends PlusBaseActivity {
     }
 
     /*
-     * Handle google plus sign in
+     * Handle google plus sign in (successfully connected)
      */
     @Override
     protected void onPlusClientSignIn() {
@@ -247,6 +251,7 @@ public class LoginActivity extends PlusBaseActivity {
     protected void onPlusClientRevokeAccess() {
         // TODO: Access to the user's G+ account has been revoked.  Per the developer terms, delete
         // any stored user data here.
+
     }
 
     @Override
@@ -298,7 +303,6 @@ public class LoginActivity extends PlusBaseActivity {
                 if(!jObject.getBoolean("error")) {
                     // get API key from the response
                     sharedPref.edit().putString(SharedPrefResources.PREFERENCE_KEY_APIKEY, jObject.getString("apiKey")).commit();
-                    Log.d(TAG, sharedPref.getString(SharedPrefResources.PREFERENCE_KEY_APIKEY,""));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -1,8 +1,6 @@
 package com.ulap_research.weatherforecasterproject.CustomAdapter;
 
 import android.content.Context;
-import android.nfc.Tag;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +59,7 @@ public class CustomUserCropAdapter extends BaseAdapter {
                 (LayoutInflater)mContext.getSystemService(
                         Context.LAYOUT_INFLATER_SERVICE);
 
-        View row = mInflater.inflate(R.layout.custom_user_crop, parent, false);
+        View row = mInflater.inflate(R.layout.custom_list_user_crop, parent, false);
 
         ImageView ivCropImage = (ImageView) row.findViewById(R.id.cropImageView);
         ivCropImage.setBackgroundResource(cropImageId[cropId.get(position) - 1]);

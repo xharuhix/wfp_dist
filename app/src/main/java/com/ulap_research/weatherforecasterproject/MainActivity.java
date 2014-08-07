@@ -124,19 +124,23 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 Intent about = new Intent(this,About.class);
                 startActivity(about);
                 return true;
-
             case R.id.action_report:
                 //report by email
                 Intent report = new Intent(Intent.ACTION_VIEW);
                 report.setData(Uri.parse("http://ulap-research.herokuapp.com/"));
                 startActivity(report);
                 return true;
-            case R.id.action_settings:
-                //setting activity
-                Intent settings = new Intent(this, Settings.class);
-                startActivity(settings);
-                return true;
             case R.id.action_logout:
+                // clear all shared preferences
+                sharedPref.edit().clear().commit();
+                // set back accept TOS because a user already accepted it
+                sharedPref.edit().putBoolean(SharedPrefResources.PREFERENCE_KEY_ACCEPT_TOS, true).commit();
+
+                // reopen login screen
+                Intent main_intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(main_intent);
+                Toast.makeText(this, R.string.successfully_logged_out, Toast.LENGTH_SHORT).show();
+                this.finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
