@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.ulap_research.weatherforecasterproject.WelcomePage">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="100dp">
+        <TextView
+            android:text="@string/welcome_intro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_sign_me_up"
+        android:id="@+id/button_sign_up"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_accept_terms"
+        android:id="@+id/checkBox_agreement"
+        android:layout_above="@+id/button_sign_up"
+        android:layout_centerHorizontal="true"
+        android:checked="false" />
+
+</RelativeLayout>

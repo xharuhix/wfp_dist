@@ -1,35 +1,19 @@
-apply plugin: 'com.android.application'
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-android {
-    compileSdkVersion 18
-    buildToolsVersion "19.1.0"
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.12.+'
 
-    defaultConfig {
-        applicationId "com.ulap_research.weatherforecasterproject"
-        minSdkVersion 15
-        targetSdkVersion 18
-        versionCode 1
-        versionName "1.0"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
     }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    sourceSets { main { java.srcDirs = ['src/main/java', 'src/main/java/user'] } }
 }
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
-    compile 'com.android.support:support-v13:19.+'
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
-    compile 'com.android.support:support-v4:19.+'
-    compile 'com.google.android.gms:play-services:4.2.42'
-    compile 'com.android.support:appcompat-v7:19.+'
+allprojects {
+    repositories {
+        jcenter()
+    }
 }

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_congruent"
+            android:layout_alignTop="@+id/actual_content"
+            android:layout_alignBottom="@id/actual_content"
+            android:layout_alignLeft="@id/actual_content"
+            android:layout_alignRight="@id/actual_content" />
+
+        <LinearLayout
+            android:id="@+id/actual_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp" >
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:textAppearanceLargeInverse" />
+
+            <TextView
+                android:id="@+id/level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:textAppearanceMediumInverse" />
+
+            <TextView
+                android:id="@+id/expRequire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:textAppearanceSmallInverse" />
+
+            <TextView
+                android:id="@+id/cloudPoint"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:textAppearanceSmallInverse" />
+
+            <TextView
+                android:id="@+id/rainAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:textAppearanceSmallInverse" />
+
+            <ProgressBar
+                android:id="@+id/levelProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="0dp"
+                android:minHeight="5dp"
+                android:progressDrawable="@drawable/custom_progress_bar_green"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nav_menu_title"
+            style="?android:listSeparatorTextViewStyle"/>
+
+        <ListView
+            android:id="@+id/list_menu"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+
+        </ListView>
+    </LinearLayout>
+</LinearLayout>
